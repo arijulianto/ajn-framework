@@ -1,4 +1,4 @@
-# ajn-framework
+# AJN Framework
 AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrograman PHP
 
 ## System Requirement
