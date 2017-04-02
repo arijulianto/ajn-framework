@@ -5,6 +5,8 @@ AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrogram
 1. PHP versi 5.4
 
 ## Installasi
+Ubah <project-folder> dengan nama folder sesuai nama folder project
+Jika sudah online atau disimpan di folder utama (public_html, www_root, htdocs) atur saja `RewriteBase /`
 1. Setting `.htaccess` di folder utama
 ```
 RewriteBase /<project-folder>/
