@@ -468,63 +468,6 @@ function time_to_sec($waktu){
     return ($h * 3600) + ($m * 60) + $s; 
 }
 
-
-/** MAKE and GET ID **/
-// make UID
-function makeUID($UID){
-	$output = '0000'.$UID;
-	$output = substr($output,-4,4);
-	$output = '7573657'.$output;
-	return $output;
-}
-// get UID
-function getUID($xUID){
-	$output = substr_replace($xUID,'',0,7);
-	$output = intval($output);
-	return $output;
-}
-// make IDAGENDA
-function makeIDAgenda($ID){
-	$output = '0000'.$ID;
-	$output = substr($output,-5,5);
-	$output = '6167656'.$output;
-	return $output;
-}
-// get IDAGENDA
-function getIDAgenda($xID){
-	$output = substr_replace($xID,'',0,7);
-	$output = intval($output);
-	return $output;
-}
-// make IDREPORT
-function makeIDReport($ID){
-	$output = '0000'.$ID;
-	$output = substr($output,-5,5);
-	$output = '7265706'.$output;
-	return $output;
-}
-// get IDREPORT
-function getIDReport($xID){
-	$output = substr_replace($xID,'',0,7);
-	$output = intval($output);
-	return $output;
-}
-// make IDABSEN
-function makeIDAbsen($ID){
-	$output = '0000'.$ID;
-	$output = substr($output,-5,5);
-	$output = '6162736'.$output;
-	return $output;
-}
-// get IDABSEN
-function getIDAbsen($xID){
-	$output = substr_replace($xID,'',0,7);
-	$output = intval($output);
-	return $output;
-}
-/** MAKE and GET ID**/
-
-
 // second to time format
 function sec_to_time($detik) { 
 	$h = floor($detik / 3600); 
@@ -572,33 +515,6 @@ function getMonths($sDate, $eDate=null,$sep='-'){
 		$sDate = date('Y-m-d', strtotime($sDate.'+ 1 month'));
 	}
 	return $months;
-}
-
-// parse IM username to link
-function parseIM($str,$key){
-	if($key=="ym")
-		$output = "<a href=\"ymsgr:sendim?$str\">$str</a>";
-	elseif($key=="sk")
-		$output = "<a href=\"skype:$str\">$str</a>";
-	elseif($key=="fb")
-		$output = "<a href=\"$str\" target=\"_blank\">fb.com/".end(explode("/",$str))."</a>";
-	elseif($key=="tw")
-		$output = "<a href=\"https://twitter.com/".str_replace('@','',$str)."\" target=\"_blank\">$str</a>";
-	elseif($key=="in")
-		$output = "<a href=\"$str\" target=\"_blank\">$str</a>";
-	elseif($key=="tel")
-		$output = "<a href=\"tel:$str\">$str</a>";
-	elseif($key=="mail")
-		$output = "<a href=\"mailto:$str\">$str</a>";
-	elseif($key=="ln")
-		$output = "<a href=\"http://line.me/ti/p/%40".str_replace('@','',$str)."\">$str</a>";
-	elseif($key=="bb")
-		$output = "<a href=\"http://pin.bbm.com/$str\">$str</a>";
-	elseif($key=="wa")
-		$output = "<a href=\"whatsapp://send?abid=$str\">$str</a>";
-	else
-		$output = $str;
-	return $output;
 }
 
 function is_mobile($agent=''){
