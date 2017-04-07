@@ -1,12 +1,30 @@
 <?php
-/*** DEBUG INFO ***/
-// mode website, tampilkan pesan error
-define('DEBUG', true);
-define('DEBUG_LEVEL', 2);
-
-// Locale Setting
-define('LOCALE_CODE', 'id_ID');
-define('LOCALE_TIMEZONE', 'Asia/Jakarta');
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+if (defined('DEBUG')){
+	if($conf['debug_level']==1)
+		error_reporting(E_ALL);
+	elseif($conf['debug_level']==2)
+		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+	else
+		error_reporting(0);
+}else{
+	exit('The application environment is not set correctly.');
+}
+/*
+ *---------------------------------------------------------------
+ * TIMEZONE SETTING
+ *---------------------------------------------------------------
+ * Setting Locale info and time
+ * By default locale setting was setup to Indonesia UTC+7 (Asia/Jakarta).
+ */
+date_default_timezone_set($conf['locale_code']);
+setlocale(LC_ALL, $conf['timezone']);
 
 
 // check Database Setting
@@ -16,13 +34,29 @@ if(DB_NAME!=''){
 
 
 // Module Name
-if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
-	define('MODULE', 'login');
-}else{
-	if($_GET['module'])
-		define('MODULE', is_dir(MODULE_PATH.$_GET['module']) ? $_GET['module'] : '404');
-	else
-		define('MODULE', $conf['default_module']);
+if($conf['site_status']=='online'){
+	if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
+		define('MODULE', 'login');
+	}else{
+		if($_GET['module']){
+			if(is_dir(MODULE_PATH.$_GET['module'])){
+				define('MODULE', $_GET['module']);
+			}else{
+				if($conf['404_mode']=='full') include TEMPLATE_PATH.'header.php';
+				include TEMPLATE_PATH.'offline.php';
+				if($conf['404_mode']=='full') include TEMPLATE_PATH.'footer.php';
+				exit;
+			}
+		}else{
+			define('MODULE', $conf['default_module']);
+		}
+	}
+}elseif($conf['site_status']=='maintenance']){
+	include TEMPLATE_PATH.'maintenance.php';
+	exit;
+}elseif($conf['site_status']=='offline']){
+	include TEMPLATE_PATH.'offline.php';
+	exit;
 }
 
 // Module Full Path
@@ -63,7 +97,10 @@ if($conf['db_setting']){
 		}
 		if($setting['lokasi_map']){
 			$sm = explode('|',$setting['lokasi_map']);
+			$cm = explode(',',$sm[0]);
 			$setting['lokasi_map'] = $sm[0];
+			$setting['lokasi_lat'] = $cm[0];
+			$setting['lokasi_lng'] = $cm[1];
 			$setting['lokasi_zoom'] = $sm[1];
 		}
 		$setting = $setting['data'];
@@ -71,7 +108,7 @@ if($conf['db_setting']){
 }
 
 // Pager
-$limit   = $conf['default_paging'];
+$limit   = $setting['paging'] ? $setting['paging'] : $conf['default_paging'];
 $halaman = $_GET['page'];
 if(empty($halaman)){
     $start = 0;
