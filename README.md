@@ -2,39 +2,27 @@
 AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrograman PHP. AJN Framework berbeda dengan framework yang sudah beredar seperti CI, Laravel, dll. AJN Framework menggunakan konsep module, bukan dengan konsep MVC sehingga developer dibuat lebih leluasa karena bekerja persis seperti naive coding namun sudah memiliki library dan struktur yang diperlukan dalam development.
 
 
-## Installasi
-Ubah <project-folder> dengan nama folder sesuai nama folder project. Jika sudah online atau disimpan di folder utama (public_html, www_root, htdocs) atur saja `RewriteBase /`
-1. Setting `.htaccess` di folder utama
-```
-RewriteBase /<project-folder>/
-```
-2. Setting Default Website di file `<project-folder>/_system/config/website.php`
-```
-define('SITE_DIR', '<project-folder>');
-```
-3. Setting Database di file `<project-folder>/_system/config/database.php`
-```
-// The name of the database
-define('DB_NAME', '');
+## Requirement
+- PHP versi 5.x (disarankan menggunakan PHP 5.4 ke atas)
+- Database MySQL (atau database lain yang akan digunakan)
 
-// database username
-define('DB_USER', 'root');
 
-// database password
-define('DB_PASSWORD', '');
+## Fitur
+Fitur standar dalam development sebuah website statis hingga dinamis sudah tersedia di AJN Framework. Adapun fitur yang dimaksud adalah seperti berikut:
+- Library: berupa fungsi dasar yang sudah ditranslasikan mencakup fungsi olah tanggal dan waktu, formatting, debugging, enkripsi, dekripsi, converter, dll.
+- Plugin: pengguna bisa membuat atau menambahkan plugin buatannya maupun plugin pihak ketiga yang bisa diseting autoload (otomatis) atau manual
+- Database: sudah disediakan fungsi olah database untuk melakukan query dengan support beberapa jenis database
+- Template: saat ini kami masih mendukung simple template, namun kedepannya akan mendukung berbagai jenis database lainnya seperi SQL Server, Oracle, dll
 
-// hostname
-define('DB_HOST', 'localhost');
 
-// database type
-define('DB_TYPE', 'mysql');
-```
+## Setup
+Untuk menggunakan AJN Framework dibutuhkan beberapa step setup yang sangat mudah.
+* Folder tempat framework akan diinstall
+* Seting default website
+* Seting database
 
-Note:
-* `DB_NAME`: nama database yang akan digunakan. Harap isi dengan `''` jika tidak ingin melakukan koneksi ke database (website statis)
-* `DB_USER`: username untuk login (otentifkasi) ke database
-* `DB_PASSWORD`" password dari username login database
-* `DB_HOST`: server database yang digunakan (`localhost` untuk database MySQL, IP Address untuk remote database)
-* `DB_TYPE`: tipe database yang akan digunakan (pilihan `mysql` untuk MySQL, `sqlsrv` untuk SQL Server)
-
-## Database Class Wrapper
+## Database Support
+AJN Framework mendukung beberapa jenis database
+- MySQL
+- SQL Server (partial)
+- SQLite (segera)
