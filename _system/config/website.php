@@ -6,6 +6,7 @@
 */
 define('DOMAIN', $_SERVER['HTTP_HOST']);
 
+
 define('SITE_DIR', 'ajn-framework');
 
 define('SITE_URL', 'http://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/');
@@ -40,7 +41,6 @@ define('MEDIA_DIR', BASEPATH.'_media/');
 $conf['debug_level'] = 2; // option: 0, 1, 2
 $conf['locale_code'] = 'id_ID';
 $conf['timezone'] = 'Asia/Jakarta';
-
 
 
 /* 
