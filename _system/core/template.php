@@ -1,6 +1,8 @@
 <?php
 if(MODULE=='logout'){
+	session_destroy();
 	include MODULE_DIR . 'index.php';
+	header('location:'.SITE_URI);
 	exit;
 }
 

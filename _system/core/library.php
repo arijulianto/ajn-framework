@@ -679,3 +679,71 @@ function array2xml($array){
 	}
 	return $xml;
 }
+
+function embed_video($url,$wh='640x360'){
+	$embed = '';
+	$wh = explode('x',$wh);
+	$width = $wh[0];
+	$height = $wh[1];
+	if(strpos($url, 'youtube.com') || strpos($url, 'www.youtube.com') || strpos($url, 'youtu.be')){
+		preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $url, $ytID);
+		$ytID = $ytID[1];
+		$video_url= 'https://www.youtube.com/embed/'.$ytID.'?rel=0&autoplay=0&modestbranding=1&cc_load_policy=1&iv_load_policy=3';
+	}elseif(strpos($url, 'facebook.com') || strpos($url, 'www.facebook.com')){
+		$video_url= 'https://www.facebook.com/plugins/video.php?href='.urlencode($url).'&show_text=0&width='.$width.'&height='.$height;
+	}elseif(stripos($url,'vimeo.com') || stripos($url,'www.vimeo.com')){
+		$vimID = explode('vimeo.com/',$url)[1];
+		$video_url= 'https://player.vimeo.com/video/'.$vimID;
+	}elseif(stripos($url,'dailymotion.com') || stripos($url,'www.dailymotion.com')){
+		$dmID = explode('dailymotion.com/video/',$url)[1];
+		$video_url= 'https://www.dailymotion.com/embed/video/'.$dmID.'?autoplay=0&info=0&logo=0&related=0&social=0';
+	}elseif(stripos($url,'metacafe.com') || stripos($url,'www.metacafe.com')){
+		$mcID = explode('metacafe.com/watch/',$url)[1];
+		$video_url= 'http://www.metacafe.com/embed/'.$mcID;
+	}else{
+		$video_url = '';
+	}
+	if($video_url){
+		$embed = '<div class="video"><img class="video-ratio" src="http://placehold.it/16x9"/><iframe width="'.$width.'" height="'.$height.'" src="'.$video_url.'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
+	}
+	return $embed;
+}
+
+function hex2rgb($hex, $alpha = false) {
+   $hex = str_replace('#', '', $hex);
+   if(strlen($hex)==6){
+      $rgb['r'] = hexdec(substr($hex, 0, 2));
+      $rgb['g'] = hexdec(substr($hex, 2, 2));
+      $rgb['b'] = hexdec(substr($hex, 4, 2));
+   }elseif(strlen($hex)==3) {
+      $rgb['r'] = hexdec(str_repeat(substr($hex, 0, 1), 2));
+      $rgb['g'] = hexdec(str_repeat(substr($hex, 1, 1), 2));
+      $rgb['b'] = hexdec(str_repeat(substr($hex, 2, 1), 2));
+   }else{
+      $rgb['r'] = '0';
+      $rgb['g'] = '0';
+      $rgb['b'] = '0';
+   }
+   if($alpha){
+      $rgb['a'] = $alpha;
+   }
+   return $rgb;
+}
+
+function rgb2hex($r, $g=-1, $b=-1){
+    if (is_array($r) && sizeof($r) == 3)
+        list($r, $g, $b) = $r;
+
+    $r = intval($r);
+    $g = intval($g);
+    $b = intval($b);
+
+    $r = dechex($r<0?0:($r>255?255:$r));
+    $g = dechex($g<0?0:($g>255?255:$g));
+    $b = dechex($b<0?0:($b>255?255:$b));
+
+    $color = (strlen($r)<2 ? '0' : '').$r;
+    $color .= (strlen($g)<2 ? '0' : '').$g;
+    $color .= (strlen($b)<2 ? '0' : '').$b;
+    return '#'.$color;
+}
