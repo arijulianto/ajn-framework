@@ -1,8 +1,8 @@
 <?php
 /*
  * --------------------------------------------------------------------------------
- * BASE SETING
+ * PLUGIN AUTOLOAD
  * --------------------------------------------------------------------------------
 */
 
-$conf['plugin'] = array('class.combo'=>'combo', 'client'=>'client');
+$conf['plugin'] = array('class.combo'=>'combo');
