@@ -107,6 +107,7 @@ $.fn.doRemove = function() {
 	return this;
 };
 
+
 String.prototype.toTitleCase = function() {
   var i, j, str, lowers, uppers;
   str = this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
@@ -129,6 +130,10 @@ String.prototype.toTitleCase = function() {
 }
 
 String.prototype.toTitleCase = function() {
+      return this.replace(/\s+/g, '-').replace(/([a-z\d])([A-Z])/g, '$1$2');
+}
+
+String.prototype.toTitleCase = function() {
   var i, j, str, lowers, uppers;
   str = this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -148,13 +153,26 @@ String.prototype.toTitleCase = function() {
 }
 
 
-
-function toTitleCase(str) {
-    return str.replace(/(?:^|\s)\w/g, function(match) {
-        return match.toUpperCase();
-    });
+Number.prototype.toHHMMSS = function() {
+  var hours = Math.floor(this / 3600) < 10 ? ("00" + Math.floor(this / 3600)).slice(-2) : Math.floor(this / 3600);
+  var minutes = ("00" + Math.floor((this % 3600) / 60)).slice(-2);
+  var seconds = ("00" + (this % 3600) % 60).slice(-2);
+  var result = hours + ":" + minutes + ":" + seconds;
+  return result;
 }
 
-function str2slug(str) {
-      return str.replace(/\s+/g, '-').replace(/([a-z\d])([A-Z])/g, '$1$2');
-   }
+Number.prototype.fileSizeName = function() {
+    var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var i = 0;
+    var size = this;
+    while(size >= 1024) {
+        size /= 1024;
+        ++i;
+    }
+    return size.toFixed(1) + ' ' + units[i];
+}
+
+Number.prototype.numberFormat = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&.');
+}
