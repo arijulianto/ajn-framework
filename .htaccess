@@ -35,8 +35,8 @@ RewriteRule ^images/([a-zA-Z0-9-_.\ \/]+)$		_template/images/$1 [NC,QSA]
 RewriteRule ^media/([a-zA-Z0-9-_.\ \/]+)$		_media/$1 [NC,QSA]
 
 # Fron End Website
-RewriteRule ^index.html$		index.php?mod=home [NC,QSA]
-RewriteRule ^([a-z-]+).html$		index.php?mod=page&slug=$1 [NC,QSA]
+RewriteRule ^index.html$		index.php?module=home [NC,QSA]
+RewriteRule ^([a-z-]+).html$		index.php?module=page&slug=$1 [NC,QSA]
 
 
 # direct Module
