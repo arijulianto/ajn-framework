@@ -5,13 +5,14 @@ Plugin UPLOAD GAMBAR
 ======================
 Oleh: Ari Julianto
 Dibuat: Desember 2014
-Update: Agustus 2016
+Update: Mei 2017
 
 
 == Cara Penggunaan ==
 if($_FILES['file']['size']>0){
     $upload = new upload($_FILES['NAMA_INPUT_GAMBAR']); // parameter: new upload(source, location) -- source: required location: ''
-    $upload->upload(); // parameter: upload(newName) -- default param: null
+    $upload->add($_FILES['NAMA_INPUT_GAMBAR']); // parameter: add(source, location) -- source: required location: '' ~ alternative
+    $upload->upload(); // parameter: upload(newName,maxSize) -- newName: default maxSize: default
     $upload->resize(800); // parameter: resize(maxWidth, newFilename) -- default param: null
     $upload->thumbnail(); // parameter: thumbnail(maxWidth, prefix); -- default: maxWidth=50 prefix:t_
 }
@@ -27,7 +28,18 @@ class upload{
     public $fullpath = null;
     public $name = null;
 
-    function __construct($source,$dir=''){
+    function __construct($source='',$dir=''){
+        if($source){
+            $this->source = $source;
+            $this->name = $source['name'];
+        }
+        if($dir){
+            $this->path = $dir;
+            $this->fullpath = ($dir ? $dir.'/' : '') . $this->name;
+        }
+    }
+
+    function add($source,$dir=''){
         $this->path = $dir;
         $this->source = $source;
         $this->name = $source['name'];
@@ -42,7 +54,7 @@ class upload{
         if($this->source && $this->name){
             $upload = move_uploaded_file($this->source['tmp_name'], $this->fullpath);
             if($upload){
-                return $this->fullpath;
+                return $this->name;
                 if($resize>0){
                    $this->resize($resize);
                 }
