@@ -8,6 +8,7 @@ define('DOMAIN', $_SERVER['HTTP_HOST']);
 
 
 define('SITE_DIR', 'ajn-framework');
+define('ADMIN_DIR', 'adminpanel');
 
 define('SITE_URL', 'http://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/');
 define('SITE_URI', (SITE_DIR ? '/'.SITE_DIR : '').'/');
@@ -38,17 +39,18 @@ define('MEDIA_DIR', BASEPATH.'_media/');
  Setting Locale info for date and time
  support timezone: http://php.net/manual/en/timezones.php
 */
-$conf['debug_level'] = 2; // option: 0, 1, 2
+$conf['debug_level'] = 2;
 $conf['locale_code'] = 'id_ID';
 $conf['timezone'] = 'Asia/Jakarta';
 
 
 /* 
  * --------------------------------------------------------------------------------
- * DEFAULT SETTING
+ * WEBSITE SETTING
  * --------------------------------------------------------------------------------
 */
-$conf['site_name'] = 'AJN Framework';
+$conf['valid_ext'] = 'html,htm';
+$conf['site_name'] = 'AJN Framework 2.0';
 $conf['site_status'] = 'online'; // option: online, maintenance, offline
 $conf['site_login'] = false;
 $conf['template'] = 'default';
