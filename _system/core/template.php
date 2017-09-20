@@ -1,38 +1,35 @@
 <?php
 if(MODULE=='logout'){
 	session_destroy();
-	include MODULE_DIR . 'index.php';
+	if(is_file(MODULE_DIR.'index.php')) include MODULE_DIR . 'index.php';
 	header('location:'.SITE_URI);
 	exit;
+}
+
+if(MODULE!='login'){
+	if($_GET['ext'] && ($ext=='json' || $ext=='xml' || $ext=='xls')){
+	    // web service skip require login
+	}else{
+	    if(MODULE!=ADMIN_DIR){
+			if($conf['site_login'] && !$_SESSION['user_uid']){
+				header('location:'.SITE_URI.'login?next='.urlencode($_SERVER['REQUEST_URI']));
+		    	exit;			
+			}
+		}
+	}
 }
 
 if(is_file(MODULE_DIR.'data.php')){
 	include MODULE_DIR . 'data.php';
 }
 
-
-if($_GET['ext'] && $_GET['ext']!='html'){
-	$ext = trim(strtolower($_GET['ext']),'.');
-	$valid_type = array('htm'=>'text/html','json'=>'application/json','xml'=>'text/xml','xls'=>'application/vnd.ms-excel');
-	if($valid_type[$ext]){
-		header("Cache-Control:public");
-		header('content-type:'.$valid_type[$ext]);
-		if(is_file(MODULE_PATH.$_GET['module'].'/'."$ext.$slug1.php")){
-					include MODULE_PATH.$_GET['module'].'/' . "$ext.$slug1.php";
-		}else{
-			$data = array('status'=>'Error', 'message'=>'The path you request is not valid. Please request a valid URL!');
-			header('content-type:application/json');
-			echo json_encode($data);
-		}
-	}else{
-		$data = array('status'=>'Error', 'message'=>'The path you request is not valid. Please request a valid URL!');
-		echo json_encode($data);
-	}
+if($_GET['module']==ADMIN_DIR){
+	include SYS_CORE . 'administrator.php';
+}elseif($_GET['ext'] && ($ext=='json' || $ext=='xml')){
+	header("cache-control:public");
+	header('content-type:'.$valid_type[$ext]);
+	header('access-control-allow-origin:*');
+	include SYS_CORE . 'webservice.php';
 }else{
-	include TEMPLATE_DIR.'header.php';
-	if($conf['autoload_module'] && $slug1)
-		include MODULE_DIR . $slug1 . '.php';
-	else
-		include MODULE_DIR . 'index.php';
-	include TEMPLATE_DIR.'footer.php';
+	include SYS_CORE . 'website.php';
 }

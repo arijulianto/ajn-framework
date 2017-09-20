@@ -661,13 +661,17 @@ function client( $u_agent = null ) {
 
 
 
-function array2json($array){
-	return json_encode($array);
+function array2json($array, $pretty=false){
+	if($pretty)
+	    return prettyPrint(json_encode($array));
+	else
+	   return json_encode($array);
 }
+
 
 function array2xml($array){
 	$xml = '';
-	foreach($array_item as $element => $value){
+	foreach($array as $element => $value){
 	    $element = is_int($element) ? 'item' : $element;
 	    if(is_array($value)){
 	        $xml .= "<$element>\n".array2xml($value)."</$element>\n";
@@ -678,6 +682,62 @@ function array2xml($array){
 	    }
 	}
 	return $xml;
+}
+
+function prettyPrint($json){
+    $result = '';
+    $level = 0;
+    $in_quotes = false;
+    $in_escape = false;
+    $ends_line_level = NULL;
+    $json_length = strlen( $json );
+
+    for( $i = 0; $i < $json_length; $i++ ) {
+        $char = $json[$i];
+        $new_line_level = NULL;
+        $post = "";
+        if( $ends_line_level !== NULL ) {
+            $new_line_level = $ends_line_level;
+            $ends_line_level = NULL;
+        }
+        if ( $in_escape ) {
+            $in_escape = false;
+        } else if( $char === '"' ) {
+            $in_quotes = !$in_quotes;
+        } else if( ! $in_quotes ) {
+            switch( $char ) {
+                case '}': case ']':
+                    $level--;
+                    $ends_line_level = NULL;
+                    $new_line_level = $level;
+                    break;
+
+                case '{': case '[':
+                    $level++;
+                case ',':
+                    $ends_line_level = $level;
+                    break;
+
+                case ':':
+                    $post = " ";
+                    break;
+
+                case " ": case "\t": case "\n": case "\r":
+                    $char = "";
+                    $ends_line_level = $new_line_level;
+                    $new_line_level = NULL;
+                    break;
+            }
+        } else if ( $char === '\\' ) {
+            $in_escape = true;
+        }
+        if( $new_line_level !== NULL ) {
+            $result .= "\n".str_repeat( "\t", $new_line_level );
+        }
+        $result .= $char.$post;
+    }
+
+    return $result;
 }
 
 function embed_video($url,$wh='640x360'){

@@ -14,6 +14,7 @@ if ($conf['debug_level']>=0 && $conf['debug_level']<=2){
 }else{
 	exit('The application environment is not set correctly.');
 }
+
 /*
  *---------------------------------------------------------------
  * TIMEZONE SETTING
@@ -21,6 +22,9 @@ if ($conf['debug_level']>=0 && $conf['debug_level']<=2){
  */
 date_default_timezone_set($conf['locale_code']);
 setlocale(LC_ALL, $conf['timezone']);
+ini_set('date.timezone', $conf['timezone']);
+
+
 
 
 // check Database Setting
@@ -29,59 +33,20 @@ if(DB_NAME!=''){
 }
 
 
+
 /*
  *---------------------------------------------------------------
- * MODULE NAME
+ * METHOD VARIABEL
  *---------------------------------------------------------------
 */
-if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
-	define('MODULE', 'login');
-}else{
-	if($conf['site_status']=='online'){
-		if($config['site_login'] && ($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
-			if($_GET['module']){
-				if(is_dir(MODULE_PATH.$_GET['module'])){
-					define('MODULE', $_GET['module']);
-				}else{
-					if($conf['404_mode']=='full') include TEMPLATE_PATH.'header.php';
-					include TEMPLATE_PATH.'404.php';
-					if($conf['404_mode']=='full') include TEMPLATE_PATH.'footer.php';
-					exit;
-				}
-			}else{
-				define('MODULE', $conf['default_module']);
-			}
-		}else{
-			//define('MODULE', 'login');
-			if($_GET['module']){
-				if(is_dir(MODULE_PATH.$_GET['module'])){
-					define('MODULE', $_GET['module']);
-				}else{
-					if($conf['404_mode']=='full') include TEMPLATE_PATH.'header.php';
-					include TEMPLATE_PATH.'404.php';
-					if($conf['404_mode']=='full') include TEMPLATE_PATH.'footer.php';
-					exit;
-				}
-			}else{
-				define('MODULE', $conf['default_module']);
-			}
-		}
-	}elseif($conf['site_status']=='maintenance'){
-		include TEMPLATE_PATH.'maintenance.php';
-		exit;
-	}elseif($conf['site_status']=='offline'){
-		include TEMPLATE_PATH.'offline.php';
-		exit;
+if($_SERVER['REQUEST_METHOD']=='PUT' || ($_SERVER['REQUEST_METHOD']=='POST' && $_POST['_METHOD']=='PUT')){
+	if($_SERVER['REQUEST_METHOD']=='PUT'){
+		parse_str(file_get_contents("php://input"),$_PUT);
+	}elseif($_SERVER['REQUEST_METHOD']=='POST' && $_POST['_METHOD']=='PUT'){
+		$_PUT = $_POST;
+		unset($_PUT['_METHOD']);
 	}
 }
-
-// Module Full Path
-define('MODULE_DIR', MODULE_PATH . MODULE . '/');
-// Module Site URI
-define('MODULE_URI', SITE_URI . MODULE);
-// Module Site URL
-define('MODULE_URL', SITE_URL . MODULE);
-
 
 
 /*
@@ -97,6 +62,90 @@ if($_GET['slug']){
 	$item = end($tmp_slug);
 	extract($tmp_slug);
 }
+
+if($_GET['ext']) $ext = trim($_GET['ext'],'.');
+
+
+
+/*
+ *---------------------------------------------------------------
+ * MODULE NAME
+ *---------------------------------------------------------------
+*/
+if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
+	define('MODULE', 'login');
+}elseif($_GET['module']==ADMIN_DIR){
+	if($slug1){
+		define('MODULE', ($_SESSION['admin_uid']?$slug1:'login'));
+	}else{
+		define('MODULE', ($_SESSION['admin_uid']?'home':'login'));
+	}
+	// Module Admin URI
+	define('MODULE_URI', SITE_URI . ADMIN_DIR .'/'. MODULE . '.php');
+	// Module Admin URL
+	define('MODULE_URL', SITE_URL . ADMIN_DIR .'/'. MODULE . '.php');
+}else{
+	if($conf['site_status']=='online'){
+		if($config['site_login'] && ($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
+			if($_GET['module']){
+				if(is_dir(MODULE_PATH.$_GET['module'])){
+					define('MODULE', $_GET['module']);
+				}else{
+					if(IS_WEBSERVICE){
+						define('MODULE', $_GET['module']);
+					}else{
+						if($conf['404_mode']=='full') include TEMPLATE_PATH.'header.php';
+						include TEMPLATE_PATH.'404.php';
+						if($conf['404_mode']=='full') include TEMPLATE_PATH.'footer.php';
+						exit;
+					}
+				}
+			}else{
+				define('MODULE', $conf['default_module']);
+			}
+		}else{
+			if($_GET['module']){
+				if(is_dir(MODULE_PATH.$_GET['module'])){
+					define('MODULE', $_GET['module']);
+				}else{
+					if(IS_WEBSERVICE){
+						define('MODULE', $_GET['module']);
+					}else{
+						if($conf['404_mode']=='full') include TEMPLATE_PATH.'header.php';
+						include TEMPLATE_PATH.'404.php';
+						if($conf['404_mode']=='full') include TEMPLATE_PATH.'footer.php';
+						exit;
+					}
+				}
+			}else{
+				define('MODULE', $conf['default_module']);
+			}
+		}
+	}elseif($conf['site_status']=='maintenance'){
+		include TEMPLATE_PATH.'maintenance.php';
+		exit;
+	}elseif($conf['site_status']=='offline'){
+		include TEMPLATE_PATH.'offline.php';
+		exit;
+	}
+}
+
+
+/*
+ *---------------------------------------------------------------
+ * MODULE
+ *---------------------------------------------------------------
+*/
+// Module Full Path
+define('MODULE_DIR', MODULE_PATH . MODULE . '/');
+// Module Site URI
+define('MODULE_URI', SITE_URI . MODULE);
+// Module Site URL
+define('MODULE_URL', SITE_URL . MODULE);
+
+
+
+
 
 /*
  *---------------------------------------------------------------
