@@ -26,6 +26,7 @@ define('PLUGIN_PATH', BASEPATH.'_plugin/');
 
 /* Load config */
 include SYS_CONFIG . 'website.php';
+include SYS_CONFIG . 'webservice.php';
 include SYS_CONFIG . 'database.php';
 include SYS_CONFIG . 'plugin.php';
 
