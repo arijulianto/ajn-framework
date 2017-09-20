@@ -1,41 +1,33 @@
 <IfModule mod_rewrite.c>
 SetEnv	SERVER_ADMIN arijulianto@programmer.net
-SetEnv	TZ Asia/Jakarta
-
+#SetEnv	TZ Asia/Jakarta
 
 RewriteEngine On
 RewriteBase /ajn-framework/
 
 # Redirect to WWW domain
-RewriteCond %{HTTP_HOST} ^www.ais.advess.cc [NC]
-RewriteRule ^(.*)$ https://ais.advess.cc/$1 [L,R=301] 
+#RewriteCond %{HTTP_HOST} !^www. [NC]
+#RewriteRule ^(.*)$ http://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301] 
+
+# Redirect to HTTPS
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
 
 RewriteCond %{SCRIPT_FILENAME} -f [OR]
 RewriteCond %{SCRIPT_FILENAME} -d
 
 RewriteRule ^.*$ - [S=84]
 
-# Administrator
-RewriteRule ^admin/?$		_administrator/index.php?module=home [NC,QSA]
-RewriteRule ^admin/index.php$		_administrator/index.php?module=home [NC,QSA]
-RewriteRule ^admin/scripts/([a-zA-Z0-9-_.\/]+).(js|css)$		_administrator/scripts/$1.$2 [NC,QSA]
-RewriteRule ^admin/images/([a-zA-Z0-9-_.]+).(jpg|png|gif)$		_administrator/images/$1.$2 [NC,QSA]
-RewriteRule ^admin/scripts/([a-zA-Z0-9-_.\/]+).(js|css|ttf|svg|eot|json|woff)$		_administrator/scripts/$1.$2 [NC,QSA]
-
-RewriteRule ^admin/([a-zA-Z0-9-]+).php$		_administrator/index.php?module=$1 [NC,QSA]
-RewriteRule ^admin/([a-zA-Z0-9-]+).php/([a-z]{4,8})=([a-zA-Z0-9]+)$		_administrator/index.php?module=$1&action=$2&id=$3 [NC,QSA]
-RewriteRule ^admin/([a-zA-Z0-9-]+).php/([a-zA-Z0-9-_\/]+)$		_administrator/index.php?module=$1&slug=$2 [NC,QSA]
-
-
 
 # Manipulasi URL
-RewriteRule ^css/([a-zA-Z0-9-_.\/\ ]+).(css|eot|svg|json|woff|ttf)$		_template/css/$1.$2 [NC,QSA]
+RewriteRule ^css/([a-zA-Z0-9-_.\/\ ]+).(css|eot|svg|otf|json|woff|woff2|ttf|ttf2)$		_template/css/$1.$2 [NC,QSA]
 RewriteRule ^js/([a-zA-Z0-9-_.\/\ ]+).js$		_template/js/$1.js [NC,QSA]
 RewriteRule ^images/([a-zA-Z0-9-_.\ \/]+)$		_template/images/$1 [NC,QSA]
 RewriteRule ^media/([a-zA-Z0-9-_.\ \/]+)$		_media/$1 [NC,QSA]
 
-# Fron End Website
-RewriteRule ^index.html$		index.php?module=home [NC,QSA]
+
+# Index & Static Page
+RewriteRule ^index.(html|htm|xhml|asp|aspx|php)$		index.php?module=home [NC,QSA]
 RewriteRule ^([a-z-]+).html$		index.php?module=page&slug=$1 [NC,QSA]
 
 
@@ -43,10 +35,9 @@ RewriteRule ^([a-z-]+).html$		index.php?module=page&slug=$1 [NC,QSA]
 RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-_\/]+)$		index.php?module=$1&slug=$2 [NC,QSA]
 RewriteRule ^([a-zA-Z0-9-]+)$		index.php?module=$1 [NC,QSA]
 
-# module with extension
-RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-_\/\ ]+).([a-z]{2,4})$		index.php?module=$1&slug=$2&ext=$3 [NC,QSA]
 
+# module with extension
+RewriteRule ^([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_\/\ ]+).([a-z]{2,4})$		index.php?module=$1&slug=$2&ext=$3 [NC,QSA]
 
 ErrorDocument 404 /ajn-framework/index.php?module=404
-
 </IfModule>
