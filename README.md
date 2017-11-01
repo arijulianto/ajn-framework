@@ -19,7 +19,7 @@ Fitur standar dalam development sebuah website statis hingga dinamis sudah terse
 Untuk menggunakan AJN Framework dibutuhkan beberapa step setup yang sangat mudah.
 * Folder tempat framework akan diinstall
 * Seting default website
-* Seting database
+* Seting database (jika diperlukan koneksi database)
 
 ## Database Support
 AJN Framework mendukung beberapa jenis database
