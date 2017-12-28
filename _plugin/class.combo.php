@@ -10,7 +10,7 @@ class combo{
             $output .= '>';
         }
         for ($i=1; $i<=31; $i++){
-            $val=$i<10 ? ")" . $i : $i;
+            $val=$i<10 ? "0" . $i : $i;
             if ($selected==$i)
                 $sel=" selected";
             else
@@ -41,13 +41,22 @@ class combo{
         $output.="</select>";
         return $output;
     }
-    function angka($start, $end, $name, $zero=0, $selected=NULL){
-        $output="<select name=$var>";
+    function angka($properties, $start, $end, $zero=false, $selected=NULL){
+        if(!is_array($properties)){
+            $output = '<select name="'.$properties.'">';
+        }else{
+            $output = '<select';
+            foreach($properties as $key=>$val)
+                $output .= " $key=\"$val\"";
+            $output .= '>';
+        }
         for ($i=$start; $i<=$end; $i++) {
-            if ($zero==1) {
-                $val=$text=$i<10 ? "0" . $i : $i;
-            } else {
+            if ($zero==false) {
                 $val=$text=$i;
+            } else {
+                $l = strlen($zero);
+                $l = $l<strlen($end) ? strlen($end) : $l;
+                $val=$text=$i<10 ? substr($zero.$i,-$l,$l) : substr($zero.$i,-$l,$l);
             }
             if ($i==$selected)
                 $sel=" selected";
@@ -58,12 +67,19 @@ class combo{
         $output.="</select>";
         return $output;
     }
-    function text($txt_array, $name, $selected=NULL,$pre=NULL){
+    function text($properties, $txt_array, $selected=NULL,$pre=NULL){
         $array = $txt_array;
         $array_key = array_keys($array);
         $sum_array = array_sum($array_key);
         $n     =count($array);
-        $output="<select name=\"$name\">";
+        if(!is_array($properties)){
+            $output = '<select name="'.$properties.'">';
+        }else{
+            $output = '<select';
+            foreach($properties as $key=>$val)
+                $output .= " $key=\"$val\"";
+            $output .= '>';
+        }
         if($pre)
             $output.="<option value=\"\">$pre</option>";
         if($array_key[0]!=0){
@@ -86,7 +102,7 @@ class combo{
         $output.="</select>";
         return  $output;
     }
-    function combo($properties=null, $data=null, $curr=null){
+    function combo($properties=null, $data=null, $curr=''){
         $str = '';
         if(is_array($properties)){
             $str = '<select';
@@ -106,9 +122,9 @@ class combo{
             for($i=1;$i<=31;$i++){
                 $val = $i<10 ? "0$i" : $i;
                 $sel = $val==$curr ? ' selected' : '';
-                $str .= '<option value="'.$val.'"'.$sel.'>$i</option>';
+                $str .= "<option value=\"$val\"$sel>$i</option>";
             }
-        }elseif($data=='bln' || $data=='bln1' || $data=='bln2'){
+        }elseif($data=='bulan' || $data=='bln' || $data=='bln1' || $data=='bln2'){
             $nm = array(1=>'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember');
             for($i=1;$i<=12;$i++){
                 $val = $i<10 ? "0$i" : $i;
@@ -120,12 +136,12 @@ class combo{
                 if(is_array($val)){
                     $str .= "<optgroup label=\"$key\">";
                     foreach($val as $k=>$v){
-                        $sel = $v==$curr ? ' selected' : '';
+                        $sel = ($curr!='' && $v==$curr) ? ' selected' : '';
                         $str .= "<option value=\"$k\"$sel>$v</option>";
                     }
                     $str .= "</optgroup>";
                 }else{
-                    $sel = $key==$curr ? ' selected' : '';
+                    $sel = ($curr!='' && $key==$curr) ? ' selected' : '';
                     $str .= "<option value=\"$key\"$sel>$val</option>";
                 }
             }
