@@ -8,7 +8,7 @@ define('DOMAIN', $_SERVER['HTTP_HOST']);
 define('CLIENT_ADDR', $_SERVER['REMOTE_ADDR']);
 
 
-define('SITE_DIR', 'ajn-framework0.2');
+define('SITE_DIR', 'ajn-framework');
 define('ADMIN_DIR', 'adminpanel');
 
 define('SITE_URL', 'http://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/');
@@ -53,8 +53,8 @@ $conf['timezone'] = 'Asia/Jakarta';
 $conf['skip_ext'] = 'html';
 $conf['site_name'] = 'AJN Framework';
 $conf['site_status'] = 'online'; // option: online, maintenance, offline
-$conf['site_login'] = true; // acticate/deactivate login web
-$conf['login_source'] = 'tbl_admin'; // table
+$conf['site_login'] = false; // acticate/deactivate login web
+$conf['login_source'] = 'tbl_user'; // table
 $conf['login_name'] = array('type'=>'email','name'=>'email','placeholder'=>'Email'); // login field (not password)
 $conf['login_cek'] = array('user_email'=>'email','user_password'=>'password'); // assign field name with input name
 $conf['login_session'] = array('uid'=>'idadmin','nama'=>'nama'); // assign session name & field data
