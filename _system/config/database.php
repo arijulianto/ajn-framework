@@ -6,13 +6,13 @@
 */
 
 // The name of the database
-define('DB_NAME', 'advess_iatop');
+define('DB_NAME', '');
 
 // database username
 define('DB_USER', 'root');
 
 // database password
-define('DB_PASSWORD', 'advess');
+define('DB_PASSWORD', '');
 
 // hostname
 define('DB_HOST', 'localhost');
