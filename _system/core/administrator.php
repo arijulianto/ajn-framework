@@ -26,7 +26,36 @@ if($_GET['slug']=='logout'){
 
 // Login proses
 if($_POST['user_login'] && $_POST['user_password']){
-	include ADMIN_PATH.'login-process.php';
+	include ADMIN_PATH.'config.php';
+	// ceklogin
+	$enc = array_reverse(explode('+',str_replace(' ','',$adm['login_encrypt'])));
+	$user_email = trim(strtolower($_POST['user_login']));
+	$user_password = $_POST['user_password'];
+	if($enc){
+		foreach($enc as $e){
+			if($e=='md5') $user_password = md5($user_password);
+			elseif($e=='base64') $user_password = base64_encode($user_password);
+		}
+	}
+	$login = $db->query("SELECT ".implode(', ',array_values($adm['login_session'])).",aktif from $adm[login_source] WHERE user_email='$user_email' AND user_password='$user_password'")->result();
+	if($login){
+		if($login['aktif']){
+			foreach($adm['login_session'] as $name=>$field){
+				$_SESSION['admin_'.$name] = $login[$field];
+			}
+			if($adm['login_recent']){
+				$now = date('Y-m-d H:i:s');
+				$ip = $_SERVER['REMOTE_ADDR'];
+				$db->query("UPDATE $adm[login_source] set lastlogin_time=nowlogin_time,lastlogin_ip=nowlogin_ip, nowlogin_time='$now',nowlogin_ip='$ip'");
+			}
+			header('location:'.($_REQUEST['next'] ? $_REQUEST['next'] : SITE_URI));
+			exit;
+		}else{
+			$msg['failed'] = 'Akun tidak aktif.<br />Silahkan hubungi Administrator untuk mengaktifkan akun Anda!';
+		}
+	}else{
+		$msg['warning'] = 'Email atau Password salah.<br />Silahkan periksa ulang!';
+	}
 }
 
 
@@ -35,15 +64,14 @@ if(MODULE=='index' || MODULE=='home' || is_file(ADMIN_PATH.'module/'.MODULE.'.ph
 	$has_module = 1;
 }
 
-
-
 // Load Module Config
 if($_SESSION['admin_uid']){
 	if(MODULE=='index' || MODULE=='home'){
 		include ADMIN_PATH.'header.php';
 		include ADMIN_PATH.'home.php';
-	}elseif(is_file(ADMIN_PATH.'module/'.MODULE.'.php')){
-		include ADMIN_PATH.'module/'.MODULE.'.php';
+	}elseif(is_file(ADMIN_PATH.'module/'.MODULE.'/index.php')){
+		include ADMIN_PATH.'header.php';
+		include ADMIN_PATH.'module/'.MODULE.'/index.php';
 		// parser
 		if($module['mode']){
 			$module['mode'] = explode(',', $module['mode']);
@@ -61,16 +89,16 @@ if($_SESSION['admin_uid']){
 			}
 			if($module['vars']['data']) $module['vars'] = $module['vars']['data'];
 		}
-		include ADMIN_PATH . 'header.php';
-		include ADMIN_PATH.'administrator.php';
+		include ADMIN_PATH . 'footer.php';
+		//include ADMIN_PATH.'administrator.php';
 	}else{
 		$module['module'] = 'Error 404 :: Halaman Tidak Ditemukan';
 		include ADMIN_PATH.'header.php';
 		echo '<div class="page404"><h1>Error 404 - Halaman Tidak Ditemukan</h1><p>Halaman yang Anda tuju tidak ditemukan. Silahkan periksa ulang URL yang Anda maksud!</p></div>';
 	}
 }else{
-	include ADMIN_PATH.'header.php';
+	//include ADMIN_PATH.'header.php';
 	include ADMIN_PATH.'login.php';
 }
 
-include ADMIN_PATH . 'footer.php';
+//include ADMIN_PATH . 'footer.php';

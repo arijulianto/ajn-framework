@@ -617,18 +617,9 @@ function client($u_agent = null){
 	return array('platform' => $platform ?: null, 'browser' => $browser ?: null, 'version' => $version ?: null);
 }
 
-
-
-function array2json($array, $pretty=false){
-	if($pretty)
-		return prettyPrint(json_encode($array));
-	else
-		return json_encode($array);
-}
-
-
 function array2xml($array){
 	$xml = '';
+	//$array = count($array)>1 ? array('items'=>$array) : $array;
 	foreach($array as $element => $value){
 		$element = is_int($element) ? 'item' : $element;
 		if(is_array($value)){
@@ -641,6 +632,16 @@ function array2xml($array){
 	}
 	return $xml;
 }
+
+
+function array2json($array, $pretty=false){
+	if($pretty)
+		return prettyPrint(json_encode($array));
+	else
+		return json_encode($array);
+}
+
+
 
 function prettyPrint($json){
 	$result = '';

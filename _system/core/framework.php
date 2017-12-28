@@ -177,10 +177,10 @@ if($conf['db_setting']){
 		if($setting['lokasi_map']){
 			$sm = explode('|',$setting['lokasi_map']);
 			$cm = explode(',',$sm[0]);
-			$setting['lokasi_map'] = $sm[0];
-			$setting['lokasi_lat'] = $cm[0];
-			$setting['lokasi_lng'] = $cm[1];
-			$setting['lokasi_zoom'] = $sm[1];
+			$setting['data']['lokasi_map'] = $sm[0];
+			$setting['data']['lokasi_lat'] = $cm[0];
+			$setting['data']['lokasi_lng'] = $cm[1];
+			$setting['data']['lokasi_zoom'] = $sm[1];
 		}
 		$setting = $setting['data'];
 	}
