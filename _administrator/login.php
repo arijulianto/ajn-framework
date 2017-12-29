@@ -39,7 +39,7 @@ else
 <input type="email" name="user_login" value="<?php echo $_POST['user_login'] ?>" placeholder="Email"<?php echo !$_POST['user_login'] ? ' autofocus' : '' ?> required />
 <input type="password" name="user_password" placeholder="Password"<?php echo $_POST['user_login'] ? ' autofocus' : '' ?> required />
 <button type="submit">Login</button>
-<input type="hidden" name="next" value="<?php echo $_GET['next'] ? $_GET['next'] : $_SERVER['REQUEST_URI'] ?>" />
+<input type="hidden" name="next" value="<?php echo (MODULE!='login' && $_GET['next']) ? $_GET['next'] : ADMIN_URI.'index.php' ?>" />
 </form>
 </div>
 </div>

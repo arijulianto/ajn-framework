@@ -7,74 +7,76 @@
     <title><?php echo $site['title'] ? $site['title'].' - ' : '' ?>Administrator Panel</title>
     <link rel="stylesheet" href="<?php echo ADMIN_URI ?>scripts/bootstrap.min.css" />
     <link rel="stylesheet" href="<?php echo ADMIN_URI ?>scripts/fonts-icons.min.css" />
-    <link rel="stylesheet" href="<?php echo ADMIN_URI ?>scripts/styles.min.css" />
+    <!-- <link rel="stylesheet" href="<?php echo ADMIN_URI ?>scripts/styles.min.css" /> -->
     <link rel="icon" href="<?php echo SITE_URI ?>favicon.ico" />
 	<!--[if IE]>
 	<script>(function(){var a=("abbr,article,aside,audio,canvas,datalist,details,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video").split(",");for(var b=0;b<a.length;b++){document.createElement(a[b])}try{document.execCommand("BackgroundImageCache",false,true)}catch(c){}})();</script>
 	<![endif]-->
 </head>
-<body class="t-default sidebar-is-reduced sidebar-is-expanded mobile-header mobile-header">
-  <header class="l-header">
-    <div class="l-header__inner clearfix">
-      	<div class="c-header-icon js-hamburger">
-	        <button class="hamburger-toggle">
-	        	<i class="ti-menu" aria-hidden="true"></i>
-	        </button>
-      	</div>
-		<div class="account-menu header-dropdown" data-dropdown="account-menu">
-			<div class="header-icons-group">
-				<div class="c-header-icon logout"><i class="fa fa-user-circle"></i></div>
-			  	<p class="user-header-caption"><span class="user-header-name">Hi Indra Prasetya</span><i class="ti-angle-down"></i></p>
-			  	<div class="layer-dropdown-dashboard"></div>
-			</div>
-			<div class="account-list-menu-dropdown header-list-dropdown" data-target-dropdown="account-menu" style="display: none">
-				<ul>
-					<li><a href="account_setting.html"><i class="ti-settings"></i> Account Settings</a></li>
-					<li><a href="#"><i class="ti-power-off"></i> Logout</a></li>
-				</ul>
-		  	</div>
+<body class="admin-page">
+<style>
+.admin-page .navbar{background:#2a3b4c}
+.admin-page .navbar a,.admin-page .navbar a:hover,.admin-page .navbar a:visited{color:#fff}
+.admin-page .accountMenu a{text-decoration:none;display:block;color:#444!important;padding:6px 10px}
+.admin-page .accountMenu a:hover{text-decoration:none;background:#eee}
+
+body{padding-top:3.5rem}
+h1{padding-bottom:9px;margin-bottom:20px;border-bottom:1px solid #eee}
+.sidebar{position:fixed;top:51px;bottom:0;left:0;z-index:1000;padding:20px 0;overflow-x:hidden;overflow-y:auto;border-right:1px solid #eee}
+.sidebar .nav{margin-bottom:20px}
+.sidebar .nav-item{width:100%}
+.sidebar .nav-item .item-sub .nav-link{padding-left:30px}
+/*.sidebar .nav-item.item-head>a{font-weight:bold}*/
+.sidebar .nav-item a{color:#333}
+.sidebar .nav-item+.nav-item{margin-left:0}
+.sidebar .nav-link{border-radius:0}
+.sidebar .nav ul{margin:0;padding:0;list-style:none}
+.placeholders{padding-bottom:3rem}
+.placeholder img{padding-top:1.5rem;padding-bottom:1.5rem}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background-color: #f5f5f5;
+}
+
+</style>
+<header>
+<nav class="navbar fixed-top navbar-expand-lg">
+	<a class="navbar-brand" href="#"><i class="fa fa-globe fa-2x"></i></a>
+	<!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="fa fa-bars"></span>
+	</button> -->
+	
+	<div class="collapse navbar-collapse" id="mainMenu">
+		<ul class="navbar-nav">
+			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+			<li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a></li>
+		</ul>
+	</div>
+	<div class="navbar-nav">
+	<div class="btn-group text-right">
+		<a href="#" class="btn"><?php echo $_SESSION['admin_nama'] ?></a>
+		<a href="#" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"><i class="fa fa-cogs"></i></a>
+		<div class="dropdown-menu accountMenu">
+			<a href="#" class="dropdown-item">Edit Profil</a>
+			<a href="#" class="dropdown-item">Ganti Password</a>
+			<div class="dropdown-divider"></div>
+			<a href="<?php echo ADMIN_URI ?>logout.php" class="dropdown-item">Logout</a>
 		</div>
-    </div>
-  </header>
-  <div class="l-sidebar">
-    <div class="logo">
-      <div class="logo__img">
-      	<i class="fa fa-globe fa-2x"></i>
-      </div>
-    </div>
-    <div class="l-sidebar__content">
-      <nav class="c-menu js-menu">
-        <ul class="u-list">
-          <!-- Single Menu -->
-          <a href="index.html">
-	          <li class="c-menu__item c-menu__single" data-toggle="tooltip" title="Dashboard">
-              <div class="c-menu-item__wrapper desktop-menu-list">
-                <i class="fa fa-dashboard"></i>
-  	            <div class="c-menu-item__title"><span>Dashboard</span></div>
-              </div>
-            </li>
-          </a>
-          <!-- Dropdown Menu -->
-		  <li class="c-menu__item c-menu__submenu" data-toggle="tooltip" title="Report">
-		 	<div class="c-menu-item__wrapper desktop-menu-list" data-submenu="report-list-menu" submenu="close">
-			  <i class="ti-stats-up"></i>
-			  <div class="c-menu-item__title"><span>Reports</span></div>
-			  <i class="ti-angle-down angle-submenu"></i>
-			</div>
-			<div class="submenu" data-content-submenu="report-list-menu">
-			  <div class="submenu__wrapper">
-				<ul>
-					<li>
-						<a class="is-submenu" href="reports_sales.html" title="Sales">Sales</a>
-					</li>
-					<li>
-						<a class="is-submenu" href="reports_transactions.html" title="Transactions">Transactions</a>
-					</li>
-				</ul>
-			  </div>
-			</div>
-		  </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
+		<a href="#" class="btn d-xl-none d-sm-none d-md-none dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars"></i></a>
+		<ul class="dropdown-menu">
+			<li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
+			<li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+			<li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a></li>
+		</ul>
+	</button>
+	</div>
+	</div>
+</nav>
+</header>
