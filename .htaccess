@@ -18,6 +18,9 @@ RewriteCond %{SCRIPT_FILENAME} -d
 
 RewriteRule ^.*$ - [S=84]
 
+# Admin assets
+RewriteRule ^([a-zA-Z0-9]+)/scripts/([a-zA-Z0-9-_.\/\ ]+)$		_administrator/scripts/$2 [NC,QSA]
+
 
 # Manipulasi URL
 RewriteRule ^css/([a-zA-Z0-9-_.\/\ ]+).(css|eot|svg|otf|json|woff|woff2|ttf|ttf2)$		_template/css/$1.$2 [NC,QSA]
@@ -33,6 +36,7 @@ RewriteRule ^([a-z-]+).html$		index.php?module=page&slug=$1 [NC,QSA]
 
 # direct Module
 RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-_\/]+)$		index.php?module=$1&slug=$2 [NC,QSA]
+RewriteRule ^([a-zA-Z0-9-]+)/$		index.php?module=$1 [NC,QSA]
 RewriteRule ^([a-zA-Z0-9-]+)$		index.php?module=$1 [NC,QSA]
 
 
