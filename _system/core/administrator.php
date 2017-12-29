@@ -20,7 +20,7 @@ if($_GET['slug']){
 // Logout proses
 if($_GET['slug']=='logout'){
 	session_destroy();
-	header('location:'.ADMIN_URI.'index.php');
+	//header('location:'.ADMIN_URI.'index.php');
 	exit;
 }
 
@@ -37,6 +37,7 @@ if($_POST['user_login'] && $_POST['user_password']){
 			elseif($e=='base64') $user_password = base64_encode($user_password);
 		}
 	}
+	
 	$login = $db->query("SELECT ".implode(', ',array_values($adm['login_session'])).",aktif from $adm[login_source] WHERE user_email='$user_email' AND user_password='$user_password'")->result();
 	if($login){
 		if($login['aktif']){
@@ -68,7 +69,8 @@ if(MODULE=='index' || MODULE=='home' || is_file(ADMIN_PATH.'module/'.MODULE.'.ph
 if($_SESSION['admin_uid']){
 	if(MODULE=='index' || MODULE=='home'){
 		include ADMIN_PATH.'header.php';
-		include ADMIN_PATH.'home.php';
+		include ADMIN_PATH.'module/home/index.php';
+		include ADMIN_PATH.'footer.php';
 	}elseif(is_file(ADMIN_PATH.'module/'.MODULE.'/index.php')){
 		include ADMIN_PATH.'header.php';
 		include ADMIN_PATH.'module/'.MODULE.'/index.php';
@@ -90,15 +92,12 @@ if($_SESSION['admin_uid']){
 			if($module['vars']['data']) $module['vars'] = $module['vars']['data'];
 		}
 		include ADMIN_PATH . 'footer.php';
-		//include ADMIN_PATH.'administrator.php';
 	}else{
 		$module['module'] = 'Error 404 :: Halaman Tidak Ditemukan';
 		include ADMIN_PATH.'header.php';
 		echo '<div class="page404"><h1>Error 404 - Halaman Tidak Ditemukan</h1><p>Halaman yang Anda tuju tidak ditemukan. Silahkan periksa ulang URL yang Anda maksud!</p></div>';
 	}
 }else{
-	//include ADMIN_PATH.'header.php';
 	include ADMIN_PATH.'login.php';
 }
 
-//include ADMIN_PATH . 'footer.php';
