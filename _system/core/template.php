@@ -2,10 +2,14 @@
 if(MODULE=='logout'){
 	session_destroy();
 	//if(is_file(MODULE_DIR.'index.php')) include MODULE_DIR . 'index.php';
-	if($conf['site_login'])
+	if($conf['site_login']){
 		header('location:'.SITE_URI.'login');
-	else
-		header('location:'.SITE_URI);
+	}else{
+		if($_GET['module']==ADMIN_DIR)
+			header('location:'.SITE_URI.ADMIN_DIR.'/login.php');
+		else
+			header('location:'.SITE_URI);
+	}
 	exit;
 }
 if(isset($_GET['module']) && $_GET['module']!='login'){
@@ -14,8 +18,13 @@ if(isset($_GET['module']) && $_GET['module']!='login'){
 	}else{
 	    if($_GET['module']==ADMIN_DIR){
 			if(!$_SESSION['admin_uid']){
-				header('location:'.SITE_URI.ADMIN_DIR.'login?next='.urlencode($_SERVER['REQUEST_URI']));
-		    	exit;			
+				if($slug1=='logout'){
+					header('location:'.SITE_URI.ADMIN_DIR.'/login');
+			    	exit;		
+		    	}elseif($slug1!='login'){
+					header('location:'.SITE_URI.ADMIN_DIR.'/login?next='.urlencode($_SERVER['REQUEST_URI']));
+			    	exit;		
+		    	}	
 			}
 		}elseif($_GET['module']!=ADMIN_DIR){
 			if($conf['site_login'] && !$_SESSION['user_uid']){
