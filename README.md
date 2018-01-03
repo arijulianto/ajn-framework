@@ -11,8 +11,9 @@ AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrogram
 Fitur standar dalam development sebuah website statis hingga dinamis sudah tersedia di AJN Framework. Adapun fitur yang dimaksud adalah seperti berikut:
 - Library: berupa fungsi dasar yang sudah ditranslasikan mencakup fungsi olah tanggal dan waktu, formatting, debugging, enkripsi, dekripsi, converter, dll.
 - Plugin: pengguna bisa membuat atau menambahkan plugin buatannya maupun plugin pihak ketiga yang bisa diseting autoload (otomatis) atau manual
-- Database: sudah disediakan fungsi olah database untuk melakukan query dengan support beberapa jenis database
-- Template: saat ini kami masih mendukung simple template, namun kedepannya akan mendukung berbagai jenis database lainnya seperi SQL Server, Oracle, dll
+- Database: sudah disediakan fungsi olah database untuk melakukan query dengan support beberapa jenis database. Sementara hanya support MySQL, namun kedepannya akan mendukung berbagai jenis database lainnya seperi SQL Server, Oracle, dll
+- Template: saat ini kami masih mendukung simple template, namun kedepannya akan diusahakan mendukung multiple template
+- Login otomatis: sistem login untuk user dan admin yang simpel dan otomatis (tidak perlu buat halaman cek login, semua hanya butuh konfigurasi yang simpel)
 
 
 ## Setup
