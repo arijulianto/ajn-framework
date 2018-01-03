@@ -35,6 +35,7 @@ RewriteRule ^([a-z-]+).html$		index.php?module=page&slug=$1 [NC,QSA]
 
 
 # direct Module
+RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+).php/([a-zA-Z0-9-_\/]+)$		index.php?module=$1&slug=$2/$3 [NC,QSA]
 RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9-_\/]+)$		index.php?module=$1&slug=$2 [NC,QSA]
 RewriteRule ^([a-zA-Z0-9-]+)/$		index.php?module=$1 [NC,QSA]
 RewriteRule ^([a-zA-Z0-9-]+)$		index.php?module=$1 [NC,QSA]
