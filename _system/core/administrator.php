@@ -38,7 +38,7 @@ if($_POST['user_login'] && $_POST['user_password']){
 		}
 	}
 	
-	$login = $db->query("SELECT ".implode(', ',array_values($adm['login_session'])).",aktif from $adm[login_source] WHERE ".$adm['login_cek']['user_login']."='$user_email' AND ".$adm['login_cek']['user_login']."='$user_password'")->result();
+	$login = $db->query("SELECT ".implode(', ',array_values($adm['login_session'])).",aktif from $adm[login_source] WHERE ".$adm['login_cek']['user_login']."='$user_email' AND ".$adm['login_cek']['user_password']."='$user_password'")->result();
 	if($login){
 		if($login['aktif']){
 			foreach($adm['login_session'] as $name=>$field){
