@@ -84,6 +84,8 @@ if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
 	define('MODULE_URI', SITE_URI . ADMIN_DIR .'/'. MODULE . '.php');
 	// Module Admin URL
 	define('MODULE_URL', SITE_URL . ADMIN_DIR .'/'. MODULE . '.php');
+	// Module Full Path
+	define('MODULE_DIR', BASEPATH . '_administrator/module/' . MODULE . '/');
 }else{
 	if($conf['site_status']=='online'){
 		if($config['site_login'] && ($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
