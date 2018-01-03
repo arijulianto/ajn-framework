@@ -1,4 +1,4 @@
-# Change Log
+# Riwayat Versi
 
 # [v0.1.3](https://github.com/arijulianto/ajn-framework/releases/tag/v0.1.3) - 3 Januari 2018
   * Perbaikan bug Admin Panel
