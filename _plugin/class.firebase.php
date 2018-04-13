@@ -1,5 +1,5 @@
 <?php
-class Firebird{
+class Firebase{
 	private $api_key;
 	private $data = array('vibrate'=>1, 'sound'=>1);
 	private $headers;
