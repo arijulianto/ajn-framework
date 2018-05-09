@@ -1,5 +1,5 @@
 # AJN Framework
-AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrograman PHP. AJN Framework berbeda dengan framework yang sudah beredar seperti CI, Laravel, dll. AJN Framework menggunakan konsep module, bukan dengan konsep MVC sehingga developer dibuat lebih leluasa karena bekerja persis seperti naive coding namun sudah memiliki library dan struktur yang diperlukan dalam development.
+AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrograman PHP. AJN Framework berbeda dengan framework yang sudah beredar seperti CI, Laravel, dll. AJN Framework menggunakan konsep module, bukan dengan konsep MVC sehingga developer dibuat lebih leluasa karena bekerja persis seperti native coding namun sudah memiliki library dan struktur yang diperlukan dalam development.
 
 
 ## Requirement
@@ -27,3 +27,5 @@ AJN Framework mendukung beberapa jenis database
 - MySQL
 - SQL Server (partial)
 - SQLite (segera)
+
+## Dokumentasi Lengkap: menyusul (sedang dirancang)
