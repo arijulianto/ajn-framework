@@ -1,11 +1,11 @@
 <?php
 $valid_web = array('htm'=>'text/html','xls'=>'application/vnd.ms-excel');
 
-if($conf['valid_ext']){
+/*if($conf['valid_ext']){
 	if(is_array($conf['valid_ext'])){
 		foreach($conf['valid_ext'] as $i=>$ext){
 			if($i>=0)
-				//$valid_web[$ext] = 'text/html';
+				//$valid_web[$ext] = 'text/html'; 
 				$nol = 0;
 			else
 				$valid_web[$i] = $ext;
@@ -14,7 +14,7 @@ if($conf['valid_ext']){
 		$conf['valid_ext'] = str_replace(' ','',$conf['valid_ext']);
 		$conf['valid_ext'] = explode(',',$conf['valid_ext']);
 	}
-}
+}*/
 
 
 if($conf['autoload_module']){

@@ -101,8 +101,14 @@ if($ext=='xls'){
 
 
 
-if($conf['service_security']=='auth' && MODULE=='auth' && $slug1=='user'){
-	$dataWebService = array('status'=>1, 'message'=>'cek+proses ngasih auth');
+if($conf['service_security']=='auth' && MODULE=='auth'){
+	if($slug1=='user' || $slug1=='session'){
+		$dataWebService = array('status'=>1, 'message'=>'cek+proses ngasih auth');
+	}elseif($slug1=='check'){
+		$dataWebService = array('status'=>1, 'message'=>'cek session');
+	}else{
+		$dataWebService = array('status'=>0, 'message'=>'The path you request is not valid. Please request a valid URLs!');
+	}
 }elseif(is_file(MODULE_PATH.$_GET['module'].'/'."$ext.$slug1.php")){
 	if($allow){
 		include MODULE_PATH.$_GET['module'].'/' . "$ext.$slug1.php";
@@ -389,7 +395,7 @@ if($conf['service_security']=='auth' && MODULE=='auth' && $slug1=='user'){
 
 
 if(!$dataWebService){
-	$dataWebService = array('status'=>0, 'code'=>323034, 'message'=>'No Data');
+	$dataWebService = array('status'=>0, 'code'=>204, 'message'=>'No Data');
 }
 if($ext=='xml'){
 	$dataWebService = array('output'=>$dataWebService);

@@ -30,7 +30,7 @@ define('MEDIA_DIR', BASEPATH.'_media/');
  option value to set:
  1 = All Error Message (Development)
  2 = Standard
- 3 = Clean Message (Production)
+ 3 = Clean Error Message (Production)
 
  # LOCALE CODE
  country code for local formatting
@@ -58,7 +58,7 @@ $conf['login_source'] = 'tbl_user'; // table
 $conf['login_name'] = array('type'=>'email','name'=>'email','placeholder'=>'Email'); // login field (not password)
 $conf['login_cek'] = array('user_email'=>'email','user_password'=>'password'); // assign field name with input name
 $conf['login_session'] = array('uid'=>'idadmin','nama'=>'nama'); // assign session name & field data
-$conf['login_encrypt'] = 'md5'; // encrypt mode
+$conf['login_encrypt'] = 'md5+base64'; // encrypt mode
 $conf['login_recent'] = true; // activate/deactivate last login
 $conf['template'] = 'default';
 
@@ -66,7 +66,7 @@ $conf['404_mode'] = 'standalone'; // option: standalone, full
 $conf['default_module'] = 'home';
 $conf['autoload_module'] = true;
 $conf['default_paging'] = 10;
-$conf['db_setting'] = false;
+$conf['db_setting'] = 'tbl_setting'; // table name
 
 $conf['service_security'] = 'none'; // option: none, whitelist, blacklist, auth (soon)
 $conf['service_prettyprint'] = false;

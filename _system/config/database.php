@@ -6,7 +6,7 @@
 */
 
 // The name of the database
-define('DB_NAME', '');
+define('DB_NAME', 'ajn');
 
 // database username
 define('DB_USER', 'root');

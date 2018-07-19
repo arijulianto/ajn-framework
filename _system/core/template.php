@@ -5,10 +5,11 @@ if(MODULE=='logout'){
 	if($conf['site_login']){
 		header('location:'.SITE_URI.'login');
 	}else{
-		if($_GET['module']==ADMIN_DIR)
-			header('location:'.SITE_URI.ADMIN_DIR.'/login.php');
-		else
+		if($_GET['module']==ADMIN_DIR){
+			header('location:'.SITE_URI.ADMIN_DIR.'/login.php?logout=true');
+		}else{
 			header('location:'.SITE_URI);
+		}
 	}
 	exit;
 }
@@ -19,12 +20,14 @@ if(isset($_GET['module']) && $_GET['module']!='login'){
 	    if($_GET['module']==ADMIN_DIR){
 			if(!$_SESSION['admin_uid']){
 				if($slug1=='logout'){
-					header('location:'.SITE_URI.ADMIN_DIR.'/login');
-			    	exit;		
+					session_destroy();		
 		    	}elseif($slug1!='login'){
-					header('location:'.SITE_URI.ADMIN_DIR.'/login?next='.urlencode($_SERVER['REQUEST_URI']));
+					header('location:'.SITE_URI.ADMIN_DIR.'/login.php?next='.urlencode($_SERVER['REQUEST_URI']));
 			    	exit;		
-		    	}	
+		    	}elseif($slug1=='login' && $_GET['logout']){
+					header('location:'.SITE_URI.ADMIN_DIR.'/login.php');
+					exit;
+				}
 			}
 		}elseif($_GET['module']!=ADMIN_DIR){
 			if($conf['site_login'] && !$_SESSION['user_uid']){
@@ -39,6 +42,9 @@ if(isset($_GET['module']) && $_GET['module']!='login'){
 			header('location:'.SITE_URI.'login?next='.urlencode($_SERVER['REQUEST_URI']));
 	    	exit;			
 	    }
+	}elseif(MODULE=='login' && $_SESSION['user_uid']){
+		header('location:'.SITE_URI);
+		exit;
 	}
 }
 
@@ -46,16 +52,26 @@ if(is_file(MODULE_DIR.'data.php')){
 	include MODULE_DIR . 'data.php';
 }
 
-if($_GET['module']=='login' && $conf['site_login']){
-	$cek_db = array_keys($conf['login_cek']);
-	$login_field = array_values($conf['login_session']);
-	if($_POST){
-		include SYS_CORE.'login-process.php';
-	}
-	include TEMPLATE_DIR . 'login.php';
-}elseif($_GET['module']==ADMIN_DIR){
+if($_GET['module']==ADMIN_DIR){
 	include SYS_CORE . 'administrator.php';
 //}elseif($_GET['ext'] && ($ext=='htm' || $ext=='json' || $ext=='xml' || $ext=='xls')){
+}elseif($_GET['module']=='login' && $conf['site_login']){
+	if($conf['login_cek']){
+		if(isset($conf['login_cek']['username']['field'])){ // login with more attribute
+			$conf['login_field'] = $conf['login_cek']['username']['field'];
+			$conf['login_user'] = $conf['login_cek']['username'];
+			unset($conf['login_user']['field']);
+			if(!$conf['login_user']['type']) $conf['login_user']['type'] = 'text';
+			if(!$conf['login_user']['placeholder']) $conf['login_user']['placeholder'] = 'Username';
+		}else{
+			$conf['login_field'] = $conf['login_cek']['username'];
+			$conf['login_user'] = array('type'=>'text', 'placeholder'=>'Username');
+		}
+	}
+	if($_POST){
+		include SYS_CORE.'userlogin.php';
+	}
+	include TEMPLATE_PATH . 'login.php';
 }elseif($_GET['ext']){
 	if($ext=='json' || $ext=='xml' || $ext=='xls'){
 		include SYS_CORE . 'webservice.php';

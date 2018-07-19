@@ -29,7 +29,11 @@ ini_set('date.timezone', $conf['timezone']);
 
 // check Database Setting
 if(DB_NAME!=''){
-	$db = new Database();
+	if(DB_USER=='root' && DB_PASSWORD=='')
+		$con_info = DB_NAME;
+	else
+		$con_info = array('host'=>DB_HOST, 'dbname'=>DB_NAME, 'username'=>DB_USER, 'password'=>DB_PASSWORD);
+	$db = new Database($con_info);
 }
 
 
@@ -87,7 +91,10 @@ if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
 	// Module Full Path
 	define('MODULE_DIR', BASEPATH . '_administrator/module/' . MODULE . '/');
 }else{
-	if($conf['site_status']=='online'){
+	if($conf['site_status']=='offline' || $conf['site_status']=='maintenance' || $conf['site_status']=='soon'){
+		include TEMPLATE_PATH.$conf['site_status'].'.php';
+		exit;
+	}else{
 		if($config['site_login'] && ($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
 			if($_GET['module']){
 				if(is_dir(MODULE_PATH.$_GET['module'])){
@@ -123,12 +130,6 @@ if($config['site_login'] && !($_SESSION['admin_uid'] || $_SESSION['user_uid'])){
 				define('MODULE', $conf['default_module']);
 			}
 		}
-	}elseif($conf['site_status']=='maintenance'){
-		include TEMPLATE_PATH.'maintenance.php';
-		exit;
-	}elseif($conf['site_status']=='offline'){
-		include TEMPLATE_PATH.'offline.php';
-		exit;
 	}
 }
 
@@ -154,6 +155,7 @@ define('MODULE_URL', SITE_URL . MODULE);
  * PLUGIN
  *---------------------------------------------------------------
 */
+define('PLUGIN_DIR', PLUGIN_PATH);
 if($conf['plugin']){
 	foreach($conf['plugin'] as $pf=>$pn){
 		if(is_file(PLUGIN_PATH.$pf.'.php')){
@@ -170,21 +172,24 @@ if($conf['plugin']){
  * SETTING
  *---------------------------------------------------------------
 */
-if($conf['db_setting']){
-	$setting = $db->query("SELECT setting_name,setting_value from tbl_setting")->results();
+if(is_string($conf['db_setting']) && DB_NAME!=''){
+	$setting = $db->query("SELECT setting_name,setting_value from $conf[db_setting]")->results();
 	if($setting){
 		foreach($setting as $row) {
 			$setting['data'][$row['setting_name']]=$row['setting_value'];
 		}
+		$setting = $setting['data'];
 		if($setting['lokasi_map']){
 			$sm = explode('|',$setting['lokasi_map']);
 			$cm = explode(',',$sm[0]);
-			$setting['data']['lokasi_map'] = $sm[0];
-			$setting['data']['lokasi_lat'] = $cm[0];
-			$setting['data']['lokasi_lng'] = $cm[1];
-			$setting['data']['lokasi_zoom'] = $sm[1];
+			$setting['lokasi_map'] = $sm[0];
+			$setting['lokasi_lat'] = $cm[0];
+			$setting['lokasi_lng'] = $cm[1];
+			$setting['lokasi_zoom'] = $sm[1];
 		}
-		$setting = $setting['data'];
+		if($setting['template']){
+			$conf['template'] = $setting['template'];
+		}
 	}
 }
 
@@ -213,5 +218,13 @@ define('SITE_NAME', $setting['site_name'] ? $setting['site_name'] : $conf['site_
  * MODULE NAME
  *---------------------------------------------------------------
 */
-define('TEMPLATE', is_dir(TEMPLATE_PATH . $conf['template']) ? $conf['template'].'/' : TEMPLATE_PATH);
-define('TEMPLATE_DIR', TEMPLATE);
+if($conf['template']!='default' && is_dir(TEMPLATE_PATH . $conf['template'])){
+	define('TEMPLATE', $conf['template'].'/');
+	define('TEMPLATE_DIR', TEMPLATE_PATH.TEMPLATE);
+	define('TEMPLATE_URI', SITE_URI.'template/'.TEMPLATE);
+}else{
+	define('TEMPLATE', '');
+	define('TEMPLATE_DIR', TEMPLATE_PATH.'default/');
+	define('TEMPLATE_URI', SITE_URI);
+}
+
