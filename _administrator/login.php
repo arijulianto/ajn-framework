@@ -21,6 +21,10 @@ body{background:#a3a6a7;background:-webkit-linear-gradient(right,#a3a6a7,#cecece
 .form button:hover,.form button:active,.form button:focus{background:#3270a5}
 .form .warning{margin:5px 0;background:#fff6bf;border:1px solid #ffd324;padding:6px;color:#817134;cursor:default;text-align:left;font-size:14px}
 .form .failed{margin:5px 0;background:#fbe3e4;border:1px solid #fbc2c4;padding:6px;color:#d12f19;cursor:default;text-align:left;font-size:14px}
+@media all and (max-width: 721px){
+	.login-page{width:auto;padding:10px;}
+	.form{padding:20px;}
+}
 </style>
 </head>
 <body>
@@ -36,10 +40,10 @@ else
 	echo '<p class="warning">Silahkan login untuk mengakses halaman ini!</p>';
 ?>
 <form action="<?php echo ADMIN_URI ?>login.php" method="post" class="login-form">
-<input type="email" name="user_login" value="<?php echo $_POST['user_login'] ?>" placeholder="Email"<?php echo !$_POST['user_login'] ? ' autofocus' : '' ?> required />
+<input type="<?php echo is_array($adm['login_source']) ? 'text' : 'email' ?>" name="user_login" value="<?php echo $_POST['user_login'] ?>" placeholder="<?php echo is_array($adm['login_source']) ? 'Username' : 'Email' ?>"<?php echo !$_POST['user_login'] ? ' autofocus' : '' ?> required />
 <input type="password" name="user_password" placeholder="Password"<?php echo $_POST['user_login'] ? ' autofocus' : '' ?> required />
 <button type="submit">Login</button>
-<input type="hidden" name="next" value="<?php echo (MODULE!='login' && $_GET['next']) ? $_GET['next'] : ADMIN_URI.'index.php' ?>" />
+<input type="hidden" name="next" value="<?php echo $_GET['next'] ? urlencode($_GET['next']) : uelencode(ADMIN_URI.'index.php') ?>" />
 </form>
 </div>
 </div>

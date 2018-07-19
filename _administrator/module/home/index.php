@@ -1,32 +1,7 @@
-<div class="container-fluid">
-      <div class="row">
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-            <li class="nav-item item-head"><a class="nav-link" href="#">Konten</a>
-            	<ul>
-            		<li class="nav-item item-sub"><a class="nav-link active" href="#">Halaman Satis</a></li>
-            		<li class="nav-item item-sub"><a class="nav-link" href="#">Artikel</a></li>
-            		<li class="nav-item item-sub"><a class="nav-link" href="#">Inbox</a></li>
-            	</ul>
-            </li>
-            <li class="nav-item item-head"><a class="nav-link" href="#">Data User</a>
-            	<ul>
-            		<li class="nav-item item-sub"><a class="nav-link" href="#">Data Admin</a></li>
-            		<li class="nav-item item-sub"><a class="nav-link" href="#">Data Customer</a></li>
-            	</ul>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#">Setting</a></li>
-          </ul>
-        </nav>
-
-        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-          <h1>Dashboard</h1>
-
-          <section class="placeholders">
-            adadadad
-          </section>
-
-        </main>
-      </div>
-    </div>
+<?php
+$level = array(1=>'User','Kontributor','Administrator',99=>'Developer', 999=>'Admin Force');
+?>
+<h1 class="title">Administrator Panel</h1>
+<div class="content">
+<p>Selamat datang <?php echo $_SESSION['admin_nama'] ?>, Anda login sebagai <?php echo $level[$_SESSION['admin_level']],' pada ',tanggal('full', $_SESSION['admin_login']),' (',durasi($_SESSION['admin_login']),')' ?>. Demi keamanan, jangan lupa lakukan logout setelah selesai.<br />&nbsp;</p>
+</div>
