@@ -12,8 +12,10 @@ Fitur standar dalam development sebuah website statis hingga dinamis sudah terse
 - Library: berupa fungsi dasar yang sudah ditranslasikan mencakup fungsi olah tanggal dan waktu, formatting, debugging, enkripsi, dekripsi, converter, dll.
 - Plugin: pengguna bisa membuat atau menambahkan plugin buatannya maupun plugin pihak ketiga yang bisa diseting autoload (otomatis) atau manual
 - Database: sudah disediakan fungsi olah database untuk melakukan query dengan support beberapa jenis database. Sementara hanya support MySQL, namun kedepannya akan mendukung berbagai jenis database lainnya seperi SQL Server, Oracle, dll
-- Template: saat ini kami masih mendukung simple template, namun kedepannya akan diusahakan mendukung multiple template
+- Template: dukungan multi template dengan template bawaan. gunakan framework ternama seperti bootstrap
 - Login otomatis: sistem login untuk user dan admin yang simpel dan otomatis (tidak perlu buat halaman cek login, semua hanya butuh konfigurasi yang simpel)
+- Admin dinamis: tidak perlu repot untuk membuat halaman CRUD di halaman admin, AJN Framework sudah mendukung admin dinamis, cukup deklarasikan kebutuhan, halaman daftar, edit, input, hapus dan aktif/nonaktif langsung bisa digunakan
+- Force login: manfaatkan fitur force login untuk admin tanpa membuat tabel user
 
 
 ## Setup
