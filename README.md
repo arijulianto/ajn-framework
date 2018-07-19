@@ -33,5 +33,5 @@ AJN Framework mendukung beberapa jenis database
 ## Dokumentasi Lengkap: menyusul (sedang dirancang)
 
 ## Bantuan
-* Untuk pertanyaan dan permasalahan silahkan buka tiket (issue)[https://github.com/arijulianto/ajn-framework/issues] insya Allah dibantu
+* Untuk pertanyaan dan permasalahan silahkan buka tiket [issue](https://github.com/arijulianto/ajn-framework/issues) insya Allah dibantu
 * Untuk sementara tidak menerima pertanyaan via email dan kontak pribadi lainnya
