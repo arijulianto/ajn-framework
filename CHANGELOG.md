@@ -1,5 +1,14 @@
 # Riwayat Versi
 
+# [v0.2](https://github.com/arijulianto/ajn-framework/releases/tag/v0.2) - 19 Juli 2018
+Rilis stabil versi 0.2 dengan berbagai peningkatan dan penambahan fitur baru:
+
+* Perbaikan routing URL
+* Dukungan multi template
+* Dukungan Admin Dinamis
+* Dukungan Force Login untuk admin
+* Berbagai perbaikan stabilitas dan performa framework
+
 # [v0.1.3](https://github.com/arijulianto/ajn-framework/releases/tag/v0.1.3) - 3 Januari 2018
   * Perbaikan bug Admin Panel
   * Perbaikan routing Admin Panel
