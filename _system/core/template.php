@@ -1,7 +1,6 @@
 <?php
 if(MODULE=='logout'){
 	session_destroy();
-	//if(is_file(MODULE_DIR.'index.php')) include MODULE_DIR . 'index.php';
 	if($conf['site_login']){
 		header('location:'.SITE_URI.'login');
 	}else{
@@ -54,7 +53,6 @@ if(is_file(MODULE_DIR.'data.php')){
 
 if($_GET['module']==ADMIN_DIR){
 	include SYS_CORE . 'administrator.php';
-//}elseif($_GET['ext'] && ($ext=='htm' || $ext=='json' || $ext=='xml' || $ext=='xls')){
 }elseif($_GET['module']=='login' && $conf['site_login']){
 	if($conf['login_cek']){
 		if(isset($conf['login_cek']['username']['field'])){ // login with more attribute
@@ -69,7 +67,7 @@ if($_GET['module']==ADMIN_DIR){
 		}
 	}
 	if($_POST){
-		include SYS_CORE.'userlogin.php';
+		include SYS_CORE.'login-process.php';
 	}
 	include TEMPLATE_PATH . 'login.php';
 }elseif($_GET['ext']){

@@ -11,10 +11,10 @@ define('CLIENT_ADDR', $_SERVER['REMOTE_ADDR']);
 define('SITE_DIR', 'ajn-framework');
 define('ADMIN_DIR', 'adminpanel');
 
-define('SITE_URL', 'http://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/');
+define('SITE_URL', $_SERVER['REQUEST_SCHEME'].'://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/');
 define('SITE_URI', (SITE_DIR ? '/'.SITE_DIR : '').'/');
 
-define('MEDIA_URL', 'http://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/media/');
+define('MEDIA_URL', $_SERVER['REQUEST_SCHEME'].'://'.DOMAIN.(SITE_DIR ? '/'.SITE_DIR : '').'/media/');
 define('MEDIA_URI', (SITE_DIR ? '/'.SITE_DIR : '').'/media/');
 define('MEDIA_DIR', BASEPATH.'_media/');
 
@@ -53,20 +53,14 @@ $conf['timezone'] = 'Asia/Jakarta';
 $conf['skip_ext'] = 'html';
 $conf['site_name'] = 'AJN Framework';
 $conf['site_status'] = 'online'; // option: online, maintenance, offline
-$conf['site_login'] = false; // acticate/deactivate login web
-$conf['login_source'] = 'tbl_user'; // table
-$conf['login_name'] = array('type'=>'email','name'=>'email','placeholder'=>'Email'); // login field (not password)
-$conf['login_cek'] = array('user_email'=>'email','user_password'=>'password'); // assign field name with input name
-$conf['login_session'] = array('uid'=>'idadmin','nama'=>'nama'); // assign session name & field data
-$conf['login_encrypt'] = 'md5+base64'; // encrypt mode
-$conf['login_recent'] = true; // activate/deactivate last login
 $conf['template'] = 'default';
 
 $conf['404_mode'] = 'standalone'; // option: standalone, full
 $conf['default_module'] = 'home';
 $conf['autoload_module'] = true;
 $conf['default_paging'] = 10;
-$conf['db_setting'] = 'tbl_setting'; // table name
+$conf['db_setting'] = ''; // table name
 
+$conf['db_service'] = false;
 $conf['service_security'] = 'none'; // option: none, whitelist, blacklist, auth (soon)
 $conf['service_prettyprint'] = false;

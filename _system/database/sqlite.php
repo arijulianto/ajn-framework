@@ -1,57 +1,26 @@
 <?php
-
 class Database{
-    private $host      = 'localhost';
-    private $username  = 'root';
-    private $password  = '';
-    private $dbname    = '';
-    private $port      = '3306';
-    private $utf       = 'utf8';
-
-    public $isConnected = false;
-
-    private $dbh;
     private $pdo;
-
-    public $aResults = array();
-    public $iAffectedRows = 0;
-    public $iLastId = 0;
-    public $iAllLastId = array();
-
+    private $dbh;
+    private $sQuery;
+    private $settings;    
+    private $log;
+    private $parameters;
     private $aValidOperation = array('SELECT', 'INSERT', 'UPDATE', 'DELETE');
-    private $sQuery = '';
-
-    public function __construct($config){
-        if($config){
-            if(is_array($config)){
-                if($config['host']) $this->host = $config['host'];
-                if($config['username']) $this->username = $config['username'];
-                if($config['password']) $this->password = $config['password'];
-                if($config['dbname']) $this->dbname = $config['dbname'];
-                if($config['utf']) $this->utf = $config['utf'];
-            }else{
-                $this->dbname = $config;
-            }
+    
+    function __construct($dbfile)
+    {
+        $dsn = 'sqlite:'.$dbfile;
+        try{
+                $this->dbh = new PDO($dsn);
+                $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         }
-        $dsn = 'mysql:host='.$this->host.';dbname='.$this->dbname.';port='.$this->port;
-      // Set options
-        $options = array(
-            PDO::ATTR_PERSISTENT    => false,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT,
-            PDO::ATTR_ERRMODE       => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES ".$this->utf,
-            PDO::ATTR_EMULATE_PREPARES => true,
-        );
-
-        try {
-            $this->dbh = new PDO($dsn, $this->username, $this->password, $options);
-            $this->isConnected = true;
-        } catch (PDOException $e) {
-            $this->error($e->getMessage());
+        catch (PDOException $e){
+                echo $this->ExceptionLog($e->getMessage());
         }
     }
-
+    
     public function query($sQuery, $bindParamWhere=[])
     {
         $sQuery       = trim($sQuery);
@@ -69,7 +38,10 @@ class Database{
                     switch($operation[0]){
                             case 'SELECT':
                                 $this->iAffectedRows = $this->pdo->rowCount();
-                                $this->aResults      = $this->pdo->fetchAll(PDO::FETCH_ASSOC);
+                                /*while($row=$this->pdo->fetch(PDO::FETCH_ASSOC)){
+                                    $this->aResults[] = $row;
+                                }*/
+                                $this->aResults = $this->pdo->fetchAll(PDO::FETCH_ASSOC);
                                 return $this;
                                 break;
                             case 'INSERT':
@@ -85,7 +57,6 @@ class Database{
                                 return $this;
                                 break;
                         }
-                        $this->pdo->closeCursor();
                 }else{
                     $this->error($this->pdo->errorInfo());
                 }
@@ -98,14 +69,13 @@ class Database{
 
     public function insert($sTable, $aData = array()){
         foreach($aData as $f => $v){
-                $tmp[] = ":s_$f";
+                $tmp[] = ":$f";
             }
             $sNameSpaceParam = implode(',', $tmp);
             unset($tmp);
             $sFields     = implode(',', array_keys($aData));
             $this->sQuery  = "INSERT INTO `$sTable`($sFields) VALUES($sNameSpaceParam);";
             $this->pdo = $this->dbh->prepare($this->sQuery);
-            $this->aData = $aData;
             $this->_bindNamespace($aData);
             try{
                 if($this->pdo->execute()){
@@ -125,7 +95,7 @@ class Database{
         if($aData[0]){
             $this->beginTrans();
             foreach($aData[0] as $f => $v){
-                    $tmp[] = ":s_$f";
+                    $tmp[] = ":$f";
                 }
                 $sNameSpaceParam = implode(', ', $tmp);
                 unset($tmp);
@@ -139,28 +109,27 @@ class Database{
                             $this->iAllLastId[] = $this->dbh->lastInsertId();
                         } else{
                             $this->error($this->pdo->errorInfo());
-                            $this->rollBack();
+                            $this->pdo->commit();
                         }
                     }
                     catch(PDOException $e){
                         $this->error($e->getMessage());
-                        $this->rollBack();
+                        $this->pdo->rollBack();
                     }
                 }
-                $this->endTrans();
-                $this->pdo->closeCursor();
+                //$this->endTrans();
                 return $this;
         }
     }
 
     public function update($sTable, $aData = array(), $aWhere = array()){
         foreach($aData as $k => $v){
-            $tmp[] = "$k = :s_$k";
+            $tmp[] = "$k = :$k";
         }
         $sFields = implode(', ', $tmp);
         unset($tmp);
         foreach($aWhere as $k => $v){
-            $tmp[] = "$k = :s_$k";
+            $tmp[] = "$k = :$k";
         }
         $sWhere = implode(' AND ', $tmp);
         unset($tmp);
@@ -184,7 +153,7 @@ class Database{
 
     public function delete($sTable, $aWhere = array()){
         foreach($aWhere as $k => $v){
-            $tmp[] = "$k = :s_$k";
+            $tmp[] = "$k = :$k";
         }
         $sWhere = implode(' AND ', $tmp);
         unset($tmp);
@@ -277,19 +246,19 @@ class Database{
     public function createTable($sTable, $fields, $pk){
         $tmp = [];
         foreach($fields as $name=>$attr){
-            //$tmp[] = "$name $attr".($name==$pk?(strpos($attr,'int')?' AUTO_INCREMENT PRIMARY KEY ':'').' PRIMARY KEY':'');
             if(strtolower($name)==strtolower($pk)){
-                $tmp[] = "$name $attr AUTO_INCREMENT PRIMARY KEY NOT NULL";
+                if(strpos(strtolower($attr), ' integer')>=0)
+                    $tmp[] = "$name $attr AUTOINCREMENT PRIMARY KEY NOT NULL";
+                else
+                    $tmp[] = "$name $attr PRIMARY KEY NOT NULL";
             }else{
                 $tmp[] = "$name $attr";
             }
         }
         $this->sQuery = "CREATE TABLE IF NOT EXISTS `$sTable` (".implode(",", $tmp).")";
-        $this->pdo = $this->dbh->prepare($this->sQuery);
         try{
-            if($this->pdo->execute()){
-                $this->pdo->closeCursor();
-                return true;
+            if(!$this->dbh->exec($this->sQuery)){
+                return $this;
             } else{
                 $this->error($this->pdo->errorInfo());
             }
@@ -342,20 +311,14 @@ class Database{
     }
 
     private function _bindNamespace($array = array()){
-        if(count($array)>0){
+        if(is_array($array)){
             foreach($array as $f => $v){
-                switch(gettype($array[$f])){
-                    case 'string':
-                        $this->pdo->bindParam(":s_$f", $array[$f], PDO::PARAM_STR);
-                        break;
-                    case 'integer':
-                        $this->pdo->bindParam(":s_$f", $array[$f], PDO::PARAM_INT);
-                        break;
-                    case 'boolean':
-                        $this->pdo->bindParam(":s_$f", $array[$f], PDO::PARAM_BOOL);
-                        break;
-                    default:
-                        $this->pdo->bindParam(":s_$f", $array[$f], PDO::PARAM_STR);
+                if(is_array($v)){
+                    foreach($v as $ff=>$vv){
+                        $this->pdo->bindParam(":$f", $array[$f]);
+                    }
+                }else{
+                    $this->pdo->bindParam(":$f", $array[$f]);
                 }
             }
         }
@@ -366,16 +329,16 @@ class Database{
             foreach($array as $f => $v){
                 switch(gettype($array[$f])){
                     case 'string':
-                        $this->pdo->bindParam($f + 1, $array[$f], PDO::PARAM_STR);
+                        $this->pdo->bindParam($f + 1, $array[$f]/*, PDO::PARAM_STR*/);
                         break;
                     case 'integer':
-                        $this->pdo->bindParam($f + 1, $array[$f], PDO::PARAM_INT);
+                        $this->pdo->bindParam($f + 1, $array[$f]/*, PDO::PARAM_INT*/);
                         break;
                     case 'boolean':
-                        $this->pdo->bindParam($f + 1, $array[$f], PDO::PARAM_BOOL);
+                        $this->pdo->bindParam($f + 1, $array[$f]/*, PDO::PARAM_BOOL*/);
                         break;
                     default:
-                        $this->pdo->bindParam($f + 1, $array[$f], PDO::PARAM_STR);
+                        $this->pdo->bindParam($f + 1, $array[$f]/*, PDO::PARAM_STR*/);
                 }
             }
         }
@@ -437,8 +400,9 @@ class Database{
             'highlight_sql'
        ), $list), strtolower($sql)));
     }
+
    
     public function highlight_sql($param){
         return '<span style="color:#990099;font-weight:bold;text-transform:uppercase;">'.$param.'</span>';
-    }
+    }                     
 }

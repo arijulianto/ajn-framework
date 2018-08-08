@@ -77,9 +77,6 @@ if($ext=='xls' && $allow==0){
 
 
 header("cache-control:public");
-/*if($ext!='xls'){
-	header('content-type:'.$valid_type[$ext]);
-}*/
 header('access-control-allow-origin:*');
 
 

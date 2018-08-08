@@ -15,13 +15,18 @@ if($_POST){
 					$data_save[$f] = $_POST['file_ori'];
 				}
 			}else{
-				$data_save[$f] = $_POST[$f];// ? $_POST[$f] : '';
+				if($forms[$f]['type']=='password'){
+					if($_POST[$f]){
+						$data_save[$f] = $_POST[$f];
+					}
+				}else{
+					$data_save[$f] = $_POST[$f];
+				}
 			}
 		}
-		//unset($data_save[$module['id']]);
 		$save = $db->update($module['table'], $data_save, array($module['id']=>$theID))->affectedRows();
 		if($save){
-			$msg['sukses'] = 'Konten '.$module['module'].' berhasil diperbaharui';
+			$msg['sukses'] = $module['module'].' berhasil diperbaharui';
 			if($uploads && $_POST['file_ori']){
 				$fn = array_keys($uploads)[0];
 				$ext = strrchr($_POST['file_ori'], '.');
@@ -31,8 +36,11 @@ if($_POST){
 					@unlink($uploads[$fn]['dir'].$name.'_small'.$ext);
 				}
 			}
+			if($module['after_post']){
+				$module['after_post']();
+			}
 		}else{
-			$msg['warning'] = 'Konten '.$module['module'].' gagal diperbaharui atau tidak ada data yang diubah. Silahkan periksa ulang inputan Anda!';
+			$msg['warning'] = $module['module'].' gagal diperbaharui atau tidak ada data yang diubah. Silahkan periksa ulang inputan Anda!';
 		}
 	}elseif($slug1=='new' && in_array('new', $mode)){
 		$data_save = array();
@@ -52,9 +60,9 @@ if($_POST){
 		}
 		$save = $db->insert($module['table'], $data_save)->getLastInsertId();
 		if($save)
-			$msg['sukses'] = 'Konten '.$module['module'].' baru berhasil ditambhahkan';
+			$msg['sukses'] = $module['module'].' baru berhasil ditambahkan';
 		else
-			$msg['warning'] = 'Konten '.$module['module'].' gagal ditambahkan. Silahkan periksa ulang inputan Anda, lalu coba lagi!';
+			$msg['warning'] = $module['module'].' gagal ditambahkan. Silahkan periksa ulang inputan Anda, lalu coba lagi!';
 	}
 }
 if($slug1=='edit' && in_array('edit', $mode)){
@@ -84,22 +92,25 @@ if($msg['sukses'])
 elseif($msg['warning'])
 	echo '<p class="alert alert-warning">',$msg['warning'],'</p>';
 
-echo '<table class="table-form">',"\n";
 
 foreach($forms as $field=>$finfo){
 	if($finfo['label']=='(hidden)'){
-		echo "<tr style=\"display:none\"><td>&nbsp;</td><td><input type=\"hidden\" name=\"$finfo[name]\" value=\"$data[$field]\" /></td></tr>\n";
+		echo "<p style=\"display:none\"><input type=\"hidden\" name=\"$finfo[name]\"",($slug1=='edit' ? " value=\"$data[$field]\"" : '')," $finfo[attr] /></p>\n";
 	}else{
-		echo "<tr>\n\t<td><label>$finfo[label] :</label></td>\n\t<td>";
+		echo "<p><label>$finfo[label] :</label></p>\n<p>";
 		// TEXTAREA
 		if($finfo['type']=='textarea'){
 			echo "<textarea name=\"$finfo[name]\" $finfo[attr]>$data[$field]</textarea>";
+		}
+		// PASSWORD
+		elseif($finfo['type']=='password'){
+			echo "<input type=\"password\" name=\"$finfo[name]\" $finfo[attr] />";
 		}
 		// RADIO / CHECKBOX
 		elseif($finfo['type']=='radio' || $finfo['type']=='checkbox'){
 			$cr = array();
 			foreach($finfo['prop'] as $k=>$v)
-				$cr[] = "<label><input type=\"$finfo[type]\" name=\"$finfo[name]\" value=\"$k\"$finfo[attr]".((!empty($data[$field]) && $k==$data[$field])?' checked' : '')." /> $v</label>";
+				$cr[] = "<label><input type=\"$finfo[type]\" name=\"$finfo[name]\" value=\"$k\"$finfo[attr]".((isset($data[$field]) && $k==$data[$field])?' checked' : '')." /> $v</label>";
 			echo '<p>',implode(' &nbsp; ', $cr),'</p>';
 		}
 		// COMBO
@@ -107,7 +118,7 @@ foreach($forms as $field=>$finfo){
 			$cr = array();
 			foreach($finfo['prop'] as $k=>$v)
 				$cr[] = "<option value=\"$k\"$finfo[attr]".($v==$data[$field]?' selected' : '').">$v</option>\n";
-			echo "<select name=\"\"$finfo[attr]>\n",implode("\t", $cr),"</select>\n";
+			echo "<select name=\"$finfo[name]\"$finfo[attr]>\n",implode("\t", $cr),"</select>\n";
 		}
 		// FILE
 		elseif($finfo['type']=='file'){
@@ -134,12 +145,11 @@ foreach($forms as $field=>$finfo){
 		}else{
 			echo "<input type=\"$finfo[type]\" name=\"$finfo[name]\" value=\"$data[$field]\" $finfo[attr] />";
 		}
-		echo "</td>\n</tr>\n";
+		echo "</p>\n";
 	}
 }
 
-echo '</table>
-</div>
+echo '</div><br />
 <div class="window-bottom">
 	<table class="table-form">
 	<tr>

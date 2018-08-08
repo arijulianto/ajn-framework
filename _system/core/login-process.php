@@ -20,7 +20,7 @@ if($login){
 			$ip = $_SERVER['REMOTE_ADDR'];
 			$db->query("UPDATE $conf[login_source] set lastlogin_tgl=nowlogin_tgl,lastlogin_ip=nowlogin_ip, nowlogin_tgl='$now',nowlogin_ip='$ip' WHERE iduser='$login[iduser]'");
 		}
-		header('location:'.($_REQUEST['next'] ? $_REQUEST['next'] : SITE_URI));
+		header('location:'.($_REQUEST['next'] ? urldecode($_REQUEST['next']) : SITE_URI));
 		exit;
 	}else{
 		$msg['failed'] = 'Akun tidak aktif.<br />Silahkan hubungi Administrator untuk mengaktifkan akun Anda!';

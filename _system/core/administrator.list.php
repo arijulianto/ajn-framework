@@ -105,8 +105,8 @@ foreach($module['list_header'] as $i=>$tx){
 
 $where = $where ? ' WHERE '.implode(' AND ', $where) : '';
 $order_sort = $module['list_order'] ? 'order by '.$module['list_order'] : '';
-$str_query = "SELECT ".implode(',',$fields)." from $module[table]$where $order_sort limit $start,$limit";
-$jml = $db->query("SELECT count($module[id]) as jml from $module[table] $where")->result();
+$str_query = "SELECT ".implode(',',$fields)." from $module[view]$where $order_sort limit $start,$limit";
+$jml = $db->query("SELECT count($module[id]) as jml from $module[view] $where")->result();
 //debug($str_query);
 $data = $db->query($str_query);
 
@@ -124,10 +124,12 @@ foreach($data as $row){
 	echo "<tr>\n";
 	foreach($module['list_data'] as $i=>$col){
 		$align = $module['list_align'][$col] ? ' class='.substr($module['list_align'][$col],0,1) : '';
-		if($module['vars'][$col])
+		if($module['vars'][$col]){
+			$raw_val = $row[$col];
 			$row[$col] = $module['vars'][$col][$row[$col]];
-		else
+		}else{
 			$row[$col] = $row[$col];
+		}
 		if($module['list_format'][$col]){
 			$ef = explode('(', str_replace(')','',$module['list_format'][$col]));
 			if($ef[0]=='image'){
@@ -151,7 +153,7 @@ foreach($data as $row){
 			}elseif($ef[0]=='small'){
 				$val = "<small>$row[$col]</small>";
 			}elseif($ef[0]=='date'){
-				$val = tanggal($ef[1], $row[$col]);
+				$val = $row[$col] ? tanggal($ef[1], $row[$col]) : '';
 			}elseif($ef[0]=='lowercase'){
 				$val = strtolower($row[$col]);
 			}elseif($ef[0]=='uppercase'){
@@ -209,7 +211,7 @@ foreach($data as $row){
 						$mode['data'][] = "<a class=\"do-action delete\" data-pid=\"$idstr\" data-type=\"".MODULE."\" data-href=\"".MODULE_URI."/delete/$idstr\">Delete</a>";
 					}elseif($act=='activate'){
 						if(in_array('aktif', $fields)){
-							if($row['aktif'])
+							if($raw_val)
 								$mode['data'][] = "<a class=\"do-action deactivate\" data-pid=\"$idstr\" data-type=\"".MODULE."\" data-href=\"".MODULE_URI."/deactivate/$idstr\">Nonaktifkan</a>";
 							else
 								$mode['data'][] = "<a class=\"do-action activate\" data-pid=\"$idstr\" data-type=\"".MODULE."\" data-href=\"".MODULE_URI."/activate/$idstr\">Aktifkan</a>";
@@ -232,7 +234,7 @@ $no++;
 }
 }else{
 echo "<tr>
-	<td colspan=",count($module['list_data']),"><p class=\"warning\">Tida ada data ",$module['module'],"</p></td>
+	<td colspan=",count($module['list_data']),"><p class=\"alert alert-warning\">Tidak ada data ",$module['module'],"</p></td>
 </tr>\n";
 }
 ?>

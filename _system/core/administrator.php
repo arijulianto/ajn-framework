@@ -3,8 +3,8 @@
 define('ADMIN_PATH', BASEPATH . '_administrator/');
 define('ADMIN_URI', SITE_URI . ADMIN_DIR . '/');
 define('ADMIN_URL', SITE_URL . ADMIN_DIR . '/');
-//$subtitle = ['new'=>'Tambah Data','edit'=>'Edit Data','delete'=>'Hapus Data','activate'=>'Aktifkan Data','deactivate'=>'Nonaktifkan Data'];
-//$default = array();
+
+
 include ADMIN_PATH.'config.php';
 
 $limit   = $setting['paging_admin'] ? $setting['paging_admin'] : $conf['default_paging'];
@@ -59,6 +59,10 @@ if($_POST['user_login'] && $_POST['user_password']){
 			foreach($adm['login_session'] as $name=>$value){
 				$_SESSION['admin_'.$name] = $value;
 			}
+			if($adm['login_recent']){
+					$now = date('Y-m-d H:i:s');
+					$_SESSION['admin_login'] = $now;
+				}
 			header('location:'.($_REQUEST['next'] ? urldecode($_REQUEST['next']) : ADMIN_URI));
 		}else{
 			$msg['warning'] = 'Email atau Password salah.<br />Silahkan periksa ulang!';
@@ -73,11 +77,10 @@ if($_POST['user_login'] && $_POST['user_password']){
 				if($adm['login_recent']){
 					$now = date('Y-m-d H:i:s');
 					$ip = $_SERVER['REMOTE_ADDR'];
-					//debug("UPDATE $adm[login_source] set lastlogin_tgl=nowlogin_tgl,lastlogin_ip=nowlogin_ip, nowlogin_tgl='$now',nowlogin_ip='$ip' WHERE $adm[login_id]='".$login[$adm['login_id']]."'");
 					$db->query("UPDATE $adm[login_source] set lastlogin_tgl=nowlogin_tgl,lastlogin_ip=nowlogin_ip, nowlogin_tgl='$now',nowlogin_ip='$ip' WHERE $adm[login_id]='".$login[$adm['login_id']]."'");
 					$_SESSION['admin_login'] = $now;
 				}
-				header('location:'.($_REQUEST['next'] ? $_REQUEST['next'] : ADMIN_URI));
+				header('location:'.($_REQUEST['next'] ? urldecode($_REQUEST['next']) : ADMIN_URI));
 				exit;
 			}else{
 				$msg['failed'] = 'Akun tidak aktif.<br />Silahkan hubungi Administrator untuk mengaktifkan akun Anda!';
@@ -147,6 +150,16 @@ if($_SESSION['admin_uid']){
 		$fields = str_replace(array(', ',' ,',' , '), ',', $module['fields']);
 		$fields = str_replace(' ','',strtolower($fields));
 		$fields = explode(',', $fields);
+		
+		if($module['input_required']){
+			$input_required = str_replace([' , ',', ',' ,'], ',', $module['input_required']);
+			$input_required = explode(',', $input_required);
+		}
+
+		if($module['edit_required']){
+			$edit_required = str_replace([' , ',', ',' ,'], ',', $module['edit_required']);
+			$edit_required = explode(',', $edit_required);
+		}
 
 		$forms = array();
 		$uploads = array();
@@ -172,6 +185,13 @@ if($_SESSION['admin_uid']){
 			}
 			$attr = str_replace(')','',$tt[1]);
 			$attr = explode('{', $attr)[0];
+
+			if($slug1=='new' && $input_required){
+				if(in_array($field, $input_required)) $attr = $attr.' required';
+			}elseif($slug1=='edit' && $edit_required){
+				if(in_array($field, $edit_required)) $attr = $attr.' required';
+			}
+
 			
 			$forms[$field] = array('label'=>$ff[0], 'type'=>$tt[0], 'name'=>$field, 'prop'=>$props, 'attr'=>$attr);
 			if($tt[0]=='file'){
@@ -195,6 +215,7 @@ if($_SESSION['admin_uid']){
 			if($module['vars']['data']) $module['vars'] = $module['vars']['data'];
 		}
 
+
 		include ADMIN_PATH.'header.php';
 		echo "<h1 class=\"title\">$module[module]</h1>\n<div class=\"content\">\n";
 		if(in_array($slug1, $mode)){
@@ -212,7 +233,12 @@ if($_SESSION['admin_uid']){
 		echo "</div>\n";
 		include ADMIN_PATH.'footer.php';
 	}else{
-		if(MODULE=='index' || MODULE=='home'){
+		if(MODULE=='media' && ($adm['menu_media'] || !is_dir(ADMIN_PATH.'module/media'))){
+			$site['title'] = 'Media Manager';
+			include ADMIN_PATH.'header.php';
+			include SYS_CORE.'administrator.media.php';
+			include ADMIN_PATH.'footer.php';
+		}elseif(MODULE=='index' || MODULE=='home'){
 			include ADMIN_PATH.'header.php';
 			include ADMIN_PATH.'module/home/index.php';
 			include ADMIN_PATH.'footer.php';

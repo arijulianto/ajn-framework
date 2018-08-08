@@ -172,7 +172,7 @@ if($conf['plugin']){
  * SETTING
  *---------------------------------------------------------------
 */
-if(is_string($conf['db_setting']) && DB_NAME!=''){
+if($conf['db_setting'] && DB_NAME!=''){
 	$setting = $db->query("SELECT setting_name,setting_value from $conf[db_setting]")->results();
 	if($setting){
 		foreach($setting as $row) {
