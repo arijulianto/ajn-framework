@@ -14,8 +14,8 @@ $module['filter'] = array(
 $module['vars'] = array('aktif'=>'1=>Aktif||0=>Tidak Aktif');
 
 /* Table List Page */
-$module['list_header'] = array('No//15','Judul//0','Halaman','Konten','Aksi');
-$module['list_data'] = array('idpage','title','slug','body','action');
+$module['list_header'] = array('No//15','Judul//0','Halaman','Konten','Status','Aksi');
+$module['list_data'] = array('idpage','title','slug','body','aktif','action');
 $module['list_format'] = array('slider'=>'image','slug'=>'titlecase','body'=>'concat(bold:title,<br />,ringkasan:body*2');
 $module['list_align'] = array('tgl'=>'center','urutan'=>'center','aktif'=>'center');
 $module['list_multiaction'] = false;

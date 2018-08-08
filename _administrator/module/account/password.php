@@ -44,4 +44,4 @@ if($_POST){
 	<td><label>Password Baru Lagi</label></td>
 	<td><input type="password" name="password_new2" size="40" placeholder="Konfirmasi Password Baru" required /></td>
 </tr>
-</table>
+</table><br />

@@ -487,12 +487,7 @@ i.text-info {
 
 .shadow{-moz-box-shadow: 0px 3px 12px #000000;-webkit-box-shadow: 0px 3px 12px #000000;box-shadow: 0px 3px 12px #000000}
 
-.window{overflow:hidden;margin:20px;}
-.window .titlebar{background:#888;padding:8px 10px;color:#fff}
-.window .workspace{background:#fff;padding:14px;overflow:hidden;min-height:400px}
-.window .window-top,.window .action-bar{padding:14px;overflow:hidden;background:#e8e3c6;border-bottom:1px solid #bbb8a9}
-.window .window-bottom{padding:14px;overflow:hidden;background:#e8e3c6;border-top:1px solid #bbb8a9}
-.window h1, .window h2, .window h3{margin:0}
+.action-bar{padding-bottom:10px}
 
 
 /* Input */
@@ -631,7 +626,7 @@ button.btn a,button.btn a:visited,button.btn a:hover{text-decoration:none}
 .pad{padding:10px}
 .pad-tb{padding-top:10px;padding-bottom:10px}
 .pad-lr{padding-left:10px;padding-right:10px}
-.content{padding:12px}
+.content{padding:20px}
 .wrap{overflow:hidden}
 .wordwrap{white-space:-moz-pre-wrap !important;white-space:-pre-wrap;white-space:-o-pre-wrap;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;white-space:normal}
 

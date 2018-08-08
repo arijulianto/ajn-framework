@@ -55,8 +55,10 @@ $data = $db->query("SELECT * from tbl_admin WHERE idadmin='$_SESSION[admin_uid]'
 	<td><label>Level</label></td>
 	<td><label class="input disabled input-block"><?php echo $level[$data['levelnum']] ?></label></td>
 </tr>
+<?php if($adm['login_recent']){ ?>
 <tr>
 	<td><label>Terakhir Login</label></td>
 	<td><label class="input disabled input-block"><?php echo durasi($data['nowlogin_tgl']),' (',tanggal('full', $data['nowlogin_tgl']) ?>)</label></td>
 </tr>
-</table>
+<?php } ?>
+</table><br />

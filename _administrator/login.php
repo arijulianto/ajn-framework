@@ -40,7 +40,7 @@ else
 	echo '<p class="warning">Silahkan login untuk mengakses halaman ini!</p>';
 ?>
 <form action="<?php echo ADMIN_URI ?>login.php" method="post" class="login-form">
-<input type="<?php echo is_array($adm['login_source']) ? 'text' : 'email' ?>" name="user_login" value="<?php echo $_POST['user_login'] ?>" placeholder="<?php echo is_array($adm['login_source']) ? 'Username' : 'Email' ?>"<?php echo !$_POST['user_login'] ? ' autofocus' : '' ?> required />
+<input type="text" name="user_login" value="<?php echo $_POST['user_login'] ?>" placeholder="Username"<?php echo !$_POST['user_login'] ? ' autofocus' : '' ?> required />
 <input type="password" name="user_password" placeholder="Password"<?php echo $_POST['user_login'] ? ' autofocus' : '' ?> required />
 <button type="submit">Login</button>
 <input type="hidden" name="next" value="<?php echo $_GET['next'] ? urlencode($_GET['next']) : uelencode(ADMIN_URI.'index.php') ?>" />
