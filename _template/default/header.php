@@ -19,56 +19,24 @@
 <script src="<?php echo TEMPLATE_URI ?>js/plugins.validInput.js"></script>
 </head>
 <body>
-<!-- <header>
-<h1>AJN Framework</h1>
-<ul>
-	<li><a href="<?php echo SITE_URI ?>"><i class="fa fa-home"></i> Home</a></li>
-	<li><a href="#"><i class="fa fa-file"></i> Framework</a>
-	<ul>
-		<li><a href="<?php echo SITE_URI ?>page/framework">Basic AJN Framework</a></li>
-		<li><a href="<?php echo SITE_URI ?>page/module">Module</a></li>
-		<li><a href="<?php echo SITE_URI ?>page/slug">URI & Slug</a></li>
-		<li><a href="<?php echo SITE_URI ?>page/extension.html">Extension</a></li>
-		<li><a href="<?php echo SITE_URI ?>page/library">Library & Plugin</a></li>
-	</ul></li>
-	<li><a href="#"><i class="fa fa-server"></i> Web Service</a>
-	<ul>
-		<li><a href="<?php echo SITE_URI ?>page/json-xml">Web Service: JSON & XML</a></li>
-		<li><a href="<?php echo SITE_URI ?>page/xls">Web Service: XLS</a></li>
-		<li><a href="<?php echo SITE_URI ?>page/webservice-lainnya">Web Service: Lainnya</a></li>
-	</ul></li>
-	<li><a href="<?php echo SITE_URI ?>page/template"><i class="fa fa-html5"></i> Template</a></li>
-	<li><a href="<?php echo SITE_URI ?>page/database"><i class="fa fa-database"></i> Database</a></li>
-</ul>
-</header> -->
-<nav class="navbar navbar-menu animated fadeInDown navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-			<a class="navbar-brand" href="<?php echo SITE_URI ?>"><?php echo $setting['site_name'] ?></a>
-		</div>
-		<div id="navbar" class="collapse navbar-collapse">
-			<ul class="nav navbar-nav">
-				<li><a href="<?php echo SITE_URI ?>">Home</a></li>
-				<li><a href="<?php echo SITE_URI ?>about.html">About</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Framework <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-					<li><a href="<?php echo SITE_URI ?>page/framework">Basic AJN Framework</a></li>
-					<li><a href="<?php echo SITE_URI ?>page/module">Module</a></li>
-					<li><a href="<?php echo SITE_URI ?>page/slug">URI & Slug</a></li>
-					<li><a href="<?php echo SITE_URI ?>page/extension.html">Extension</a></li>
-					<li><a href="<?php echo SITE_URI ?>page/library">Library & Plugin</a></li>
-				</ul>
-				</li>
-            	<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Web Service <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-					<li><a href="<?php echo SITE_URI ?>page/json-xml">Web Service: JSON & XML</a></li>
-					<li><a href="<?php echo SITE_URI ?>page/xls">Web Service: XLS</a></li>
-					<li><a href="<?php echo SITE_URI ?>page/webservice-lainnya">Web Service: Lainnya</a></li>
-				</ul></li>
-				<li><a href="<?php echo SITE_URI ?>contact.html">Contact</a></li>
-			</ul>
-		</div>
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="<?php echo SITE_URI ?>">My Project</a>
+	</div>
+	<div id="navbar" class="collapse navbar-collapse navbar-right">
+		<ul class="nav navbar-nav">
+			<li<?php echo MODULE=='home' ? ' class="active"' : '' ?>><a href="<?php echo SITE_URI ?>">Home</a></li>
+			<li<?php echo (MODULE=='page' && $slug1=='about') ? ' class="active"' : '' ?>><a href="<?php echo SITE_URI ?>about.html">About</a></li>
+			<li<?php echo (MODULE=='page' && $slug1=='contact') ? ' class="active"' : '' ?>><a href="<?php echo SITE_URI ?>contact.html">Contact</a></li>
+		</ul>
+	</div>
 	</div>
 </nav>
 <div class="container">
