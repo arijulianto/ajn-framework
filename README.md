@@ -27,8 +27,9 @@ Untuk menggunakan AJN Framework dibutuhkan beberapa step setup yang sangat mudah
 ## Database Support
 AJN Framework mendukung beberapa jenis database
 - MySQL
+- SQLite
 - SQL Server (partial)
-- SQLite (segera)
+- PostreSQL (segera)
 
 ## Dokumentasi Lengkap: menyusul (sedang dirancang)
 
