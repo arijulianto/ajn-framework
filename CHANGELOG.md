@@ -1,5 +1,8 @@
 # Riwayat Versi
 
+# [v1.0](https://github.com/arijulianto/ajn-framework/releases/tag/v1.0) - 23 Februari 2019
+Rilis versi pertama 1.0 dengan perubahan konsep menjadi MVC
+
 # [v0.2](https://github.com/arijulianto/ajn-framework/releases/tag/v0.2) - 19 Juli 2018
 Rilis stabil versi 0.2 dengan berbagai peningkatan dan penambahan fitur baru:
 
