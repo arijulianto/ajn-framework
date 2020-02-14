@@ -1,0 +1,2 @@
+<h1>Hubungi Kami</h1>
+<p>Butuh bantuan fitur AJN Framework? Silahkan cek <a href="//github.com/arijulianto/ajn-framework/wiki" target="_blank">Wiki</a> kami di <a href="//github.com/arijulianto">Github</a></p>

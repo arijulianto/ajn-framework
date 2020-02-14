@@ -1,6 +1,4 @@
 # AJN Framework
-PENTING: untuk versi 1.0 tidak bisa upgrade dari versi sebelumnya (0.x) karena sudah menggunakan konsep MVC!
-
 AJN Framework adalah framework untuk website dengan menggunakan bahasa pemrograman PHP. AJN Framework berbeda dengan framework yang sudah beredar seperti CI, Laravel, dll. AJN Framework menggunakan konsep module, bukan dengan konsep MVC sehingga developer dibuat lebih leluasa karena bekerja persis seperti native coding namun sudah memiliki library dan struktur yang diperlukan dalam development.
 
 
